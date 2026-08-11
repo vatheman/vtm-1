@@ -21,8 +21,8 @@ while ($listener.IsListening) {
         $response = $context.Response
         
         $urlPath = $request.Url.LocalPath
-        if ($urlPath -eq "/" -or $urlPath -eq "/admin") { 
-            $urlPath = "/index.html" 
+        if ($urlPath -eq "/" -or $urlPath -eq "/admin" -or $urlPath -eq "/index.html") { 
+            $urlPath = "/index.cdn.html" 
         }
         
         if ($urlPath.StartsWith("/assets/")) {
