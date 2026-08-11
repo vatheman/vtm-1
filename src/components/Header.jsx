@@ -7,7 +7,9 @@ export default function Header({
   onOpenCart, 
   onOpenAuth, 
   currentPath, 
-  onNavigate 
+  onNavigate,
+  session,
+  onLogout
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -101,14 +103,29 @@ export default function Header({
             <span className="hidden sm:inline">관리자</span> (/admin)
           </button>
 
-          {/* User Login Modal Trigger */}
-          <button
-            onClick={onOpenAuth}
-            className="p-2 hover:bg-white/10 rounded-full transition-colors text-white"
-            title="로그인 / 회원가입"
-          >
-            <User size={20} />
-          </button>
+          {/* User Login / Session */}
+          {session ? (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#D0B579] font-bold hidden sm:inline">
+                👤 {session.user?.email?.split('@')[0]}님
+              </span>
+              <button
+                onClick={onLogout}
+                className="px-3 py-1.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors"
+              >
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={onOpenAuth}
+              className="flex items-center gap-1 text-xs font-bold text-white hover:text-[#D0B579] transition-colors"
+              title="로그인 / 회원가입"
+            >
+              <User size={18} />
+              <span className="hidden sm:inline">로그인</span>
+            </button>
+          )}
 
           {/* Cart Icon */}
           <button

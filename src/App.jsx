@@ -9,28 +9,36 @@ import { InstagramFeed, ReviewSection } from './components/InstagramFeed';
 import { CartDrawer, Footer } from './components/CartDrawer';
 import AuthModal from './components/AuthModal';
 import AdminLayout from './admin/AdminLayout';
+import { supabase } from './lib/supabaseClient';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   
   // Cart state
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "자연빛깔 손염색 감나무 실크 스카프",
-      price: 89000,
-      dyeType: "감염 (Persimmon)",
-      image: "/assets/images/product1.png",
-      quantity: 1
-    }
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Auth modal state
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
+  // Supabase Auth session
+  const [session, setSession] = useState(null);
+
   // Product detail modal state
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Supabase Auth listener
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Sync window.location.pathname on popstate / routing
   useEffect(() => {
@@ -66,6 +74,11 @@ export default function App() {
     setCartItems([]);
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+  };
+
   // If path starts with /admin, render Admin Panel Layout
   if (currentPath.startsWith('/admin')) {
     return <AdminLayout onNavigateHome={() => navigateTo('/')} />;
@@ -81,6 +94,8 @@ export default function App() {
         onOpenAuth={() => setIsAuthOpen(true)}
         currentPath={currentPath}
         onNavigate={navigateTo}
+        session={session}
+        onLogout={handleLogout}
       />
 
       {/* Main Content */}

@@ -254,7 +254,14 @@
                   <span className="w-2.5 h-2.5 rounded-full bg-[#D0B579] animate-pulse"></span>
                   <span className="text-xs font-bold text-[#D0B579] tracking-widest">ADMIN SYSTEM</span>
                 </div>
-                <h1 className="text-2xl font-bold font-serif mb-6">VATHEMAN</h1>
+                <div className="mb-6 h-8 overflow-hidden relative flex items-center">
+                  <img 
+                    src="/assets/images/logo-blue.png" 
+                    alt="VATHEMAN" 
+                    className="h-[170%] w-auto object-cover object-top" 
+                    style={{ filter: 'invert(1) grayscale(1) brightness(2)', mixBlendMode: 'screen' }}
+                  />
+                </div>
 
                 <nav className="space-y-2 text-xs font-medium">
                   <button onClick={() => setAdminTab('dashboard')} className={`w-full text-left p-3 rounded-xl flex items-center justify-between ${adminTab === 'dashboard' ? 'bg-[#0B318F] text-white font-bold' : 'text-[#A0AAB2] hover:bg-[#3B3632]'}`}>
@@ -395,8 +402,13 @@
               🌿 자연소재 · 자연빛깔 · 자연염색 브랜드 바더만 | <a href={BRAND_INFO.smartstoreUrl} target="_blank" className="underline text-[#D0B579] font-bold">네이버 스마트스토어 공식몰 바로가기</a>
             </div>
             <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
-              <div className="font-serif font-bold text-2xl tracking-widest text-white cursor-pointer" onClick={() => setView('home')}>
-                VATHEMAN
+              <div className="flex items-center cursor-pointer h-10 overflow-hidden relative" onClick={() => setView('home')}>
+                <img 
+                  src="/assets/images/logo-blue.png" 
+                  alt="VATHEMAN" 
+                  className="h-[170%] w-auto object-cover object-top" 
+                  style={{ filter: 'invert(1) grayscale(1) brightness(2)', mixBlendMode: 'screen' }}
+                />
               </div>
 
               {/* Navigation Items (ABOUT, SHOP, FAQ, NOTICE) */}
@@ -864,7 +876,7 @@
                       className={`w-full py-3.5 rounded-xl font-bold text-xs shadow-md transition-all ${
                         isSignUpFormValid && !authLoading
                           ? 'bg-[#0B318F] hover:bg-[#082672] text-white shadow-lg cursor-pointer'
-                          : 'bg-gray-200 text-gray-400 cursor-not-allowed border border-[#D1D8E0]'
+                          : 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-300'
                       }`}
                     >
                       {authLoading ? '회원가입 처리 중...' : '바더만 회원가입 완료하기'}
@@ -892,7 +904,14 @@
           <footer className="bg-[#F7F2E9] text-[#424242] py-12 text-xs border-t text-left">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
-                <p className="font-bold text-[#0B318F] text-lg font-serif">VATHEMAN</p>
+                <div className="h-10 overflow-hidden relative flex items-center mb-2 w-32">
+                  <img 
+                    src="/assets/images/logo-blue.png" 
+                    alt="VATHEMAN" 
+                    className="h-[170%] w-auto object-cover object-top" 
+                    style={{ mixBlendMode: 'multiply' }}
+                  />
+                </div>
                 <p className="text-[#6E6862] mt-1 font-light">{BRAND_INFO.slogan}</p>
                 <p className="text-[#6E6862] text-[11px] mt-2">{BRAND_INFO.address}</p>
               </div>
