@@ -173,6 +173,22 @@ export const FAQS_DATA = [
 
 export const CUSTOMERS_DATA = [
   {
+    id: "CUST-1000",
+    name: "바더만 (vatheman@naver.com)",
+    gender: "남성",
+    ageGroup: "30대",
+    tier: "VVIP",
+    purchaseCount: 15,
+    totalAmount: 2500000,
+    points: 75000,
+    phone: "010-4000-2352",
+    email: "vatheman@naver.com",
+    registeredAt: "2026-08-11",
+    lastPurchasedAt: "2026-08-11",
+    preferredDye: "감염 (Persimmon)",
+    status: "최고관리자"
+  },
+  {
     id: "CUST-1001",
     name: "김민서",
     gender: "여성",
