@@ -103,6 +103,7 @@
       const [signUpPassword, setSignUpPassword] = useState('');
       const [signUpConfirmPassword, setSignUpConfirmPassword] = useState('');
       const [signUpName, setSignUpName] = useState('');
+      const [signUpGender, setSignUpGender] = useState('여성');
       const [signUpPhone, setSignUpPhone] = useState('');
 
       const [showPw, setShowPw] = useState(false);
@@ -185,6 +186,7 @@
               options: {
                 data: {
                   full_name: signUpName,
+                  gender: signUpGender,
                   phone_number: signUpPhone,
                   agree_marketing: agreeMarketing,
                   marketing_channels: { sms: mktSms, email: mktEmail, kakao: mktKakao }
@@ -748,6 +750,29 @@
                         onChange={(e) => setSignUpName(e.target.value)}
                         className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
                       />
+                    </div>
+
+                    {/* Gender Selection */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1">
+                        성별 <span className="text-rose-500">*</span>
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {['여성', '남성', '선택 안함'].map(g => (
+                          <button
+                            key={g}
+                            type="button"
+                            onClick={() => setSignUpGender(g)}
+                            className={`py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                              signUpGender === g
+                                ? 'bg-[#0B318F] text-white border-[#0B318F] shadow-sm'
+                                : 'bg-[#FAF6F0]/50 text-[#6E6862] border-[#E8DFD5] hover:border-[#0B318F]'
+                            }`}
+                          >
+                            {g}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Phone Number with Auto Formatter */}

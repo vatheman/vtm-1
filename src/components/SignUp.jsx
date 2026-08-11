@@ -8,6 +8,7 @@ export default function SignUp({ onSwitchToLogin, onClose }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [gender, setGender] = useState('여성');
   const [phone, setPhone] = useState('');
 
   // UI state
@@ -79,6 +80,7 @@ export default function SignUp({ onSwitchToLogin, onClose }) {
           options: {
             data: {
               full_name: name,
+              gender: gender,
               phone_number: phone,
               agree_marketing: agreeMarketing,
               marketing_channels: agreeMarketing ? marketingChannels : null
@@ -266,6 +268,29 @@ export default function SignUp({ onSwitchToLogin, onClose }) {
               onChange={(e) => setName(e.target.value)}
               className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
             />
+          </div>
+        </div>
+
+        {/* Gender Selection */}
+        <div>
+          <label className="block text-xs font-bold text-[#2C2825] mb-1.5">
+            성별 <span className="text-rose-500">*</span>
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            {['여성', '남성', '선택 안함'].map(g => (
+              <button
+                key={g}
+                type="button"
+                onClick={() => setGender(g)}
+                className={`py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                  gender === g
+                    ? 'bg-[#0B318F] text-white border-[#0B318F] shadow-sm'
+                    : 'bg-gray-50 text-[#6E6862] border-[#E8DFD5] hover:border-[#0B318F]'
+                }`}
+              >
+                {g}
+              </button>
+            ))}
           </div>
         </div>
 
