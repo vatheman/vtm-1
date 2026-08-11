@@ -131,7 +131,7 @@
 
       const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signUpEmail);
       const hasMinLength = signUpPassword.length >= 8;
-      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/test(signUpPassword);
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|]/.test(signUpPassword);
       const isPwValid = hasMinLength && hasSpecialChar;
       const isPwMatch = signUpConfirmPassword !== '' && signUpConfirmPassword === signUpPassword;
       const isNameValid = signUpName.trim().length >= 2;
