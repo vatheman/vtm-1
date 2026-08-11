@@ -42,19 +42,8 @@
   </style>
   <script>
     window.onerror = function(msg, url, line, col, error) {
-      console.error("Global Error caught:", msg, url, line, col, error);
-      var root = document.getElementById('root');
-      if (msg === 'Script error.' && root && root.children.length > 0) {
-        return;
-      }
-      if (root && root.children.length === 0) {
-        root.innerHTML = '<div style="padding:40px;max-width:600px;margin:50px auto;background:#fff;border:1px solid #e8dfd5;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);font-family:sans-serif;text-align:left;">' +
-          '<h3 style="color:#e11d48;margin-top:0;">⚠️ 스크립트 실행 오류 안내</h3>' +
-          '<p style="font-size:13px;color:#475569;"><b>오류 내용:</b> ' + msg + '</p>' +
-          '<p style="font-size:12px;color:#64748b;"><b>발생 위치:</b> ' + (url || '내부 스크립트') + ' (라인 ' + line + ', 컬럼 ' + col + ')</p>' +
-          '<pre style="background:#f8fafc;padding:12px;border-radius:8px;font-size:11px;overflow-x:auto;color:#334155;">' + (error && error.stack ? error.stack : 'N/A') + '</pre>' +
-          '</div>';
-      }
+      console.error("[App Error Log]:", msg, "at", url, line, col, error);
+      return false;
     };
   </script>
 </head>
