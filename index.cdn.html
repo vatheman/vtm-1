@@ -75,13 +75,7 @@
     ];
 
     const CUSTOMERS_DATA = [
-      { id: "CUST-1000", name: "바더만 (vatheman@naver.com)", gender: "남성", ageGroup: "30대", tier: "VVIP", purchaseCount: 15, totalAmount: 2500000, points: 75000, preferredDye: "감염 (Persimmon)", status: "최고관리자" },
-      { id: "CUST-1001", name: "김민서", gender: "여성", ageGroup: "30대", tier: "VVIP", purchaseCount: 8, totalAmount: 1240000, points: 37200, preferredDye: "감염 (Persimmon)", status: "활성" },
-      { id: "CUST-1002", name: "박준혁", gender: "남성", ageGroup: "40대", tier: "VIP", purchaseCount: 5, totalAmount: 680000, points: 20400, preferredDye: "쪽염 (Indigo)", status: "활성" },
-      { id: "CUST-1003", name: "이수진", gender: "여성", ageGroup: "50대 이상", tier: "VVIP", purchaseCount: 12, totalAmount: 1890000, points: 56700, preferredDye: "황토염 (Red Clay)", status: "활성" },
-      { id: "CUST-1004", name: "정유진", gender: "여성", ageGroup: "20대", tier: "GOLD", purchaseCount: 3, totalAmount: 260000, points: 7800, preferredDye: "쑥염 (Mugwort)", status: "활성" },
-      { id: "CUST-1005", name: "최성원", gender: "남성", ageGroup: "30대", tier: "SILVER", purchaseCount: 2, totalAmount: 147000, points: 4410, preferredDye: "쪽염 (Indigo)", status: "활성" },
-      { id: "CUST-1006", name: "윤서연", gender: "여성", ageGroup: "20대", tier: "BRONZE", purchaseCount: 1, totalAmount: 89000, points: 2670, preferredDye: "감염 (Persimmon)", status: "신규" }
+      { id: "CUST-1000", name: "바더만 (vatheman@naver.com)", gender: "남성", ageGroup: "30대", tier: "VVIP", purchaseCount: 1, totalAmount: 89000, points: 2670, preferredDye: "감염 (Persimmon)", status: "최고관리자" }
     ];
 
     const SUPABASE_URL = "https://hccxdafqavxioxnksgsy.supabase.co";
@@ -300,17 +294,16 @@
               {adminTab === 'dashboard' && (
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">전체 고객수</span><h3 className="text-2xl font-bold font-serif">1,280 명</h3></div>
-                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">누적 매출액</span><h3 className="text-2xl font-bold font-serif text-[#0B318F]">38,900,000 원</h3></div>
-                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">총 거래건수</span><h3 className="text-2xl font-bold font-serif">265 건</h3></div>
-                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">평균 주문금액</span><h3 className="text-2xl font-bold font-serif">146,700 원</h3></div>
+                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">전체 가입 회원수</span><h3 className="text-2xl font-bold font-serif">1 명 (실제)</h3></div>
+                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">누적 결제금액</span><h3 className="text-2xl font-bold font-serif text-[#0B318F]">89,000 원</h3></div>
+                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">총 거래건수</span><h3 className="text-2xl font-bold font-serif">1 건</h3></div>
+                    <div className="warm-card p-5 bg-white"><span className="text-xs text-[#6E6862]">평균 주문금액</span><h3 className="text-2xl font-bold font-serif">89,000 원</h3></div>
                   </div>
 
                   <div className="warm-card p-6 bg-white">
-                    <h3 className="text-base font-bold mb-3">⚡ 실시간 고객 등록 피드</h3>
+                    <h3 className="text-base font-bold mb-3">⚡ 실시간 회원 등록 피드</h3>
                     <div className="space-y-2 text-xs">
-                      <div className="p-3 rounded-lg bg-[#FAF6F0] flex justify-between"><span>윤서연 (seoyeon***@naver.com) - 신규 가입</span><span className="font-bold text-[#0B318F]">방금 전</span></div>
-                      <div className="p-3 rounded-lg bg-[#FAF6F0] flex justify-between"><span>김민서 (minseo***@gmail.com) - 롱텐실 스카프 구매 89,000원</span><span className="font-bold text-[#0B318F]">42분 전</span></div>
+                      <div className="p-3 rounded-lg bg-[#FAF6F0] flex justify-between"><span>바더만 (vatheman@naver.com) - 최고 관리자 등록 완료</span><span className="font-bold text-[#0B318F]">실시간 (Supabase)</span></div>
                     </div>
                   </div>
                 </div>
