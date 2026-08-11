@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-cream: #FDFBF7;
+  --bg-linen: #F5F0E6;
+  --bg-warm-light: #FAF6F0;
+  --primary-terracotta: #C47B59;
+  --primary-dark: #8C533E;
+  --indigo-deep: #2A3B50;
+  --sage-green: #7A8B7B;
+  --text-dark: #2C2825;
+  --text-muted: #6E6862;
+  --border-color: #E8DFD5;
+  --card-bg: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-linen);
+}
+::-webkit-scrollbar-thumb {
+  background: #D4C9BD;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-terracotta);
+}
+
+/* Glassmorphism & Card Styles */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 223, 213, 0.7);
+}
+
+.warm-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(44, 40, 37, 0.03);
+  transition: all 0.25s ease;
+}
+
+.warm-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(196, 123, 89, 0.12);
+  border-color: var(--primary-terracotta);
+}
+
+/* Badge Styles */
+.badge-tier {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-vvip { background: #FDE8E4; color: #8C533E; border: 1px solid #F5C6BC; }
+.badge-vip { background: #FEF3EB; color: #C47B59; border: 1px solid #FAD1B8; }
+.badge-gold { background: #FFF9E6; color: #B8860B; border: 1px solid #F7E4A1; }
+.badge-silver { background: #EFF4F2; color: #4B6E64; border: 1px solid #C8DDD7; }
+.badge-bronze { background: #F0F2F5; color: #5B6B79; border: 1px solid #D1D8E0; }
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

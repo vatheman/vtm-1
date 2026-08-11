@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>바더만 VATHEMAN | 자연소재 자연빛깔 자연염색 브랜드 & 관리자센터</title>
+  <meta name="description" content="핸드메이드 / 자연(천연)염색 / 생활용품 / 바른가치를 더해 만드는 선물 - 바더만 공식 브랜드 홈페이지 및 통합 관리자 시스템 (/admin)" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN for instant styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans KR"', 'sans-serif'],
+            serif: ['"Cormorant Garamond"', 'serif']
+          },
+          colors: {
+            cream: '#FDFBF7',
+            linen: '#F5F0E6',
+            warm: '#FAF6F0',
+            terracotta: '#C47B59',
+            earth: '#8C533E',
+            indigo: '#2A3B50',
+            sage: '#7A8B7B',
+            charcoal: '#2C2825'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#FDFBF7] text-[#2C2825] font-sans antialiased">
+  <div id="root"></div>
+
+  <!-- Vite module entry point -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
