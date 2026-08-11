@@ -13,6 +13,7 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -77,11 +78,78 @@
       { id: "CUST-1006", name: "윤서연", gender: "여성", ageGroup: "20대", tier: "BRONZE", purchaseCount: 1, totalAmount: 89000, points: 2670, preferredDye: "감염 (Persimmon)", status: "신규" }
     ];
 
+    const SUPABASE_URL = "https://hccxdafqavxioxnksgsy.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhjY3hkYWZxYXZ4aW94bmtzZ3N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0MjYwMDgsImV4cCI6MjEwMjAwMjAwOH0.gF7ezDPbZTIWclieZ4sZ-J7gwSgrgS1jSNoBRFIlxyE";
+    const supabaseClient = (typeof supabase !== 'undefined' && supabase.createClient) 
+      ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
+      : null;
+
     function App() {
       const [view, setView] = useState('home'); // 'home' | 'admin'
       const [adminTab, setAdminTab] = useState('dashboard'); // 'dashboard' | 'customers' | 'reports'
       const [isAuthOpen, setIsAuthOpen] = useState(false);
       const [shopTab, setShopTab] = useState('전체');
+
+      // Supabase Auth States
+      const [session, setSession] = useState(null);
+      const [authMode, setAuthMode] = useState('login'); // 'login' | 'signup'
+      const [authEmail, setAuthEmail] = useState('');
+      const [authPassword, setAuthPassword] = useState('');
+      const [authLoading, setAuthLoading] = useState(false);
+      const [authMsg, setAuthMsg] = useState({ type: '', text: '' });
+
+      useEffect(() => {
+        if (!supabaseClient) return;
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+          setSession(session);
+        });
+
+        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((_event, session) => {
+          setSession(session);
+        });
+
+        return () => subscription.unsubscribe();
+      }, []);
+
+      const handleAuthSubmit = async (e) => {
+        e.preventDefault();
+        if (!supabaseClient) return;
+        setAuthLoading(true);
+        setAuthMsg({ type: '', text: '' });
+
+        try {
+          if (authMode === 'login') {
+            const { error } = await supabaseClient.auth.signInWithPassword({
+              email: authEmail,
+              password: authPassword,
+            });
+            if (error) throw error;
+            setAuthMsg({ type: 'success', text: '로그인 성공!' });
+            setTimeout(() => {
+              setIsAuthOpen(false);
+              setAuthMsg({ type: '', text: '' });
+            }, 1000);
+          } else {
+            const { error } = await supabaseClient.auth.signUp({
+              email: authEmail,
+              password: authPassword,
+            });
+            if (error) throw error;
+            setAuthMsg({ type: 'success', text: '회원가입 신청이 완료되었습니다!' });
+          }
+        } catch (err) {
+          setAuthMsg({ type: 'error', text: err.message || '인증 처리에 실패했습니다.' });
+        } finally {
+          setAuthLoading(false);
+        }
+      };
+
+      const handleLogout = async () => {
+        if (supabaseClient) {
+          await supabaseClient.auth.signOut();
+          setSession(null);
+        }
+      };
 
       // Filter States
       const [gender, setGender] = useState('전체');
@@ -292,9 +360,20 @@
                 <button onClick={() => setView('admin')} className="px-3.5 py-1.5 rounded-full bg-[#D0B579] text-[#2C2825] text-xs font-bold shadow-sm">
                   ⚙️ 관리자 (/admin)
                 </button>
-                <button onClick={() => setIsAuthOpen(true)} className="text-xs font-bold text-white hover:text-[#D0B579]">
-                  로그인
-                </button>
+                {session ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[#D0B579] font-bold hidden sm:inline">
+                      👤 {session.user?.email?.split('@')[0]}님
+                    </span>
+                    <button onClick={handleLogout} className="px-3 py-1 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors">
+                      로그아웃
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={() => setIsAuthOpen(true)} className="text-xs font-bold text-white hover:text-[#D0B579]">
+                    로그인 / 회원가입
+                  </button>
+                )}
               </div>
             </div>
           </header>
@@ -406,12 +485,13 @@
             </div>
           </section>
 
-          {/* Auth Modal */}
+          {/* Auth Modal with Real Supabase Backend Integration */}
           {isAuthOpen && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center relative border border-[#E8DFD5]">
-                <button onClick={() => setIsAuthOpen(false)} className="absolute top-4 right-4 text-gray-400">✕</button>
-                <div className="h-10 overflow-hidden relative flex items-center justify-center mb-2 mx-auto w-32">
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+              <div className="bg-white rounded-2xl p-8 max-w-sm w-full relative border border-[#E8DFD5] shadow-2xl text-left">
+                <button onClick={() => setIsAuthOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+                
+                <div className="h-10 overflow-hidden relative flex items-center justify-center mb-3 mx-auto w-32">
                   <img 
                     src="/assets/images/logo-blue.png" 
                     alt="VATHEMAN" 
@@ -419,11 +499,68 @@
                     style={{ mixBlendMode: 'multiply' }}
                   />
                 </div>
-                <span className="text-xs text-[#D0B579] font-bold block mb-4">Supabase Auth 연동 준비단계</span>
-                <p className="text-xs text-[#6E6862] mb-6">로그인 및 회원가입 버튼 UI입니다. 수파베이스 백엔드 연결 준비가 완료되었습니다.</p>
-                <button onClick={() => alert("수파베이스 백엔드 로그인 연동 대기중")} className="w-full py-3 bg-[#0B318F] text-white font-bold rounded-xl text-xs shadow-md">
-                  로그인 / 회원가입 실행 (Supabase Ready)
-                </button>
+
+                <div className="flex justify-center items-center gap-1 mb-4">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    ⚡ Supabase Project Connected (hccxdafqavxioxnksgsy)
+                  </span>
+                </div>
+
+                <div className="flex border-b border-[#E8DFD5] mb-5">
+                  <button
+                    onClick={() => { setAuthMode('login'); setAuthMsg({ type: '', text: '' }); }}
+                    className={`flex-1 py-2 text-center text-xs font-bold transition-colors ${authMode === 'login' ? 'text-[#0B318F] border-b-2 border-[#0B318F]' : 'text-gray-400'}`}
+                  >
+                    이메일 로그인
+                  </button>
+                  <button
+                    onClick={() => { setAuthMode('signup'); setAuthMsg({ type: '', text: '' }); }}
+                    className={`flex-1 py-2 text-center text-xs font-bold transition-colors ${authMode === 'signup' ? 'text-[#0B318F] border-b-2 border-[#0B318F]' : 'text-gray-400'}`}
+                  >
+                    회원가입
+                  </button>
+                </div>
+
+                {authMsg.text && (
+                  <div className={`p-3 rounded-xl mb-4 text-xs font-medium ${authMsg.type === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}`}>
+                    {authMsg.text}
+                  </div>
+                )}
+
+                <form onSubmit={handleAuthSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-[#2C2825] mb-1">이메일 주소</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="vatheman@example.com"
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#2C2825] mb-1">비밀번호</label>
+                    <input
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="w-full py-3 bg-[#0B318F] hover:bg-[#082672] text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                  >
+                    {authLoading ? '처리 중...' : (authMode === 'login' ? '로그인 실행' : '회원가입 신청')}
+                  </button>
+                </form>
               </div>
             </div>
           )}
