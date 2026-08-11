@@ -98,6 +98,54 @@
       const [authLoading, setAuthLoading] = useState(false);
       const [authMsg, setAuthMsg] = useState({ type: '', text: '' });
 
+      // Detailed SignUp Form States & Validations
+      const [signUpEmail, setSignUpEmail] = useState('');
+      const [signUpPassword, setSignUpPassword] = useState('');
+      const [signUpConfirmPassword, setSignUpConfirmPassword] = useState('');
+      const [signUpName, setSignUpName] = useState('');
+      const [signUpPhone, setSignUpPhone] = useState('');
+
+      const [showPw, setShowPw] = useState(false);
+      const [showConfirmPw, setShowConfirmPw] = useState(false);
+
+      const [agreeTerms, setAgreeTerms] = useState(false);
+      const [agreePrivacy, setAgreePrivacy] = useState(false);
+      const [agreeMarketing, setAgreeMarketing] = useState(false);
+      const [mktSms, setMktSms] = useState(true);
+      const [mktEmail, setMktEmail] = useState(true);
+      const [mktKakao, setMktKakao] = useState(true);
+      const [showTermsDetail, setShowTermsDetail] = useState(null);
+
+      const agreeAll = agreeTerms && agreePrivacy && agreeMarketing;
+      const toggleAgreeAll = (e) => {
+        const val = e.target.checked;
+        setAgreeTerms(val);
+        setAgreePrivacy(val);
+        setAgreeMarketing(val);
+      };
+
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signUpEmail);
+      const hasMinLength = signUpPassword.length >= 8;
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/test(signUpPassword);
+      const isPwValid = hasMinLength && hasSpecialChar;
+      const isPwMatch = signUpConfirmPassword !== '' && signUpConfirmPassword === signUpPassword;
+      const isNameValid = signUpName.trim().length >= 2;
+      const rawPhone = signUpPhone.replace(/[^0-9]/g, '');
+      const isPhoneValid = rawPhone.length === 10 || rawPhone.length === 11;
+
+      const isSignUpFormValid = isEmailValid && isPwValid && isPwMatch && isNameValid && isPhoneValid && agreeTerms && agreePrivacy;
+
+      const handlePhoneInput = (e) => {
+        const num = e.target.value.replace(/[^0-9]/g, '');
+        let formatted = num;
+        if (num.length > 3 && num.length <= 7) {
+          formatted = `${num.slice(0, 3)}-${num.slice(3)}`;
+        } else if (num.length > 7) {
+          formatted = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+        }
+        setSignUpPhone(formatted);
+      };
+
       useEffect(() => {
         if (!supabaseClient) return;
         supabaseClient.auth.getSession().then(({ data: { session } }) => {
@@ -130,12 +178,25 @@
               setAuthMsg({ type: '', text: '' });
             }, 1000);
           } else {
+            if (!isSignUpFormValid) return;
             const { error } = await supabaseClient.auth.signUp({
-              email: authEmail,
-              password: authPassword,
+              email: signUpEmail,
+              password: signUpPassword,
+              options: {
+                data: {
+                  full_name: signUpName,
+                  phone_number: signUpPhone,
+                  agree_marketing: agreeMarketing,
+                  marketing_channels: { sms: mktSms, email: mktEmail, kakao: mktKakao }
+                }
+              }
             });
             if (error) throw error;
-            setAuthMsg({ type: 'success', text: '회원가입 신청이 완료되었습니다!' });
+            setAuthMsg({ type: 'success', text: '🎉 바더만 회원가입이 완료되었습니다! 로그인해 주세요.' });
+            setTimeout(() => {
+              setAuthMode('login');
+              setAuthMsg({ type: '', text: '' });
+            }, 1800);
           }
         } catch (err) {
           setAuthMsg({ type: 'error', text: err.message || '인증 처리에 실패했습니다.' });
@@ -485,11 +546,11 @@
             </div>
           </section>
 
-          {/* Auth Modal with Real Supabase Backend Integration */}
+          {/* Auth Modal with Real Supabase Backend Integration & Full SignUp Form */}
           {isAuthOpen && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
-              <div className="bg-white rounded-2xl p-8 max-w-sm w-full relative border border-[#E8DFD5] shadow-2xl text-left">
-                <button onClick={() => setIsAuthOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in overflow-y-auto">
+              <div className={`bg-white rounded-3xl p-6 sm:p-8 w-full relative border border-[#E8DFD5] shadow-2xl text-left my-8 transition-all ${authMode === 'signup' ? 'max-w-md' : 'max-w-sm'}`}>
+                <button onClick={() => setIsAuthOpen(false)} className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 
                 <div className="h-10 overflow-hidden relative flex items-center justify-center mb-3 mx-auto w-32">
                   <img 
@@ -503,7 +564,7 @@
                 <div className="flex justify-center items-center gap-1 mb-4">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                   <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    ⚡ Supabase Project Connected (hccxdafqavxioxnksgsy)
+                    ⚡ Supabase Connected (hccxdafqavxioxnksgsy)
                   </span>
                 </div>
 
@@ -528,39 +589,300 @@
                   </div>
                 )}
 
-                <form onSubmit={handleAuthSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#2C2825] mb-1">이메일 주소</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="vatheman@example.com"
-                      value={authEmail}
-                      onChange={(e) => setAuthEmail(e.target.value)}
-                      className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
-                    />
-                  </div>
+                {authMode === 'login' ? (
+                  <form onSubmit={handleAuthSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1">이메일 주소</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="vatheman@example.com"
+                        value={authEmail}
+                        onChange={(e) => setAuthEmail(e.target.value)}
+                        className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-[#2C2825] mb-1">비밀번호</label>
-                    <input
-                      type="password"
-                      required
-                      placeholder="••••••••"
-                      value={authPassword}
-                      onChange={(e) => setAuthPassword(e.target.value)}
-                      className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1">비밀번호</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={authPassword}
+                        onChange={(e) => setAuthPassword(e.target.value)}
+                        className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                      />
+                    </div>
 
-                  <button
-                    type="submit"
-                    disabled={authLoading}
-                    className="w-full py-3 bg-[#0B318F] hover:bg-[#082672] text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-2"
-                  >
-                    {authLoading ? '처리 중...' : (authMode === 'login' ? '로그인 실행' : '회원가입 신청')}
-                  </button>
-                </form>
+                    <button
+                      type="submit"
+                      disabled={authLoading}
+                      className="w-full py-3.5 bg-[#0B318F] hover:bg-[#082672] text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                    >
+                      {authLoading ? '로그인 처리 중...' : '로그인 실행'}
+                    </button>
+                  </form>
+                ) : (
+                  /* FULL DETAILED SIGN UP FORM */
+                  <form onSubmit={handleAuthSubmit} className="space-y-4 text-left">
+                    {/* Email Input */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1 flex justify-between items-center">
+                        <span>이메일 (아이디) <span className="text-rose-500">*</span></span>
+                        {signUpEmail && (
+                          <span className={`text-[11px] ${isEmailValid ? 'text-emerald-600 font-bold' : 'text-rose-500'}`}>
+                            {isEmailValid ? '✓ 올바른 이메일 형식' : '✕ 이메일 형식 오류'}
+                          </span>
+                        )}
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="user@example.com"
+                        value={signUpEmail}
+                        onChange={(e) => setSignUpEmail(e.target.value)}
+                        className={`w-full p-3 rounded-xl border text-xs focus:outline-none transition-all ${
+                          signUpEmail
+                            ? isEmailValid
+                              ? 'border-emerald-500 bg-emerald-50/20'
+                              : 'border-rose-400 bg-rose-50/20'
+                            : 'border-[#E8DFD5] focus:border-[#0B318F]'
+                        }`}
+                      />
+                    </div>
+
+                    {/* Password Input with Eye toggle button */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1">
+                        비밀번호 <span className="text-rose-500">*</span>
+                      </label>
+                      <div className="relative mb-1.5">
+                        <input
+                          type={showPw ? 'text' : 'password'}
+                          required
+                          placeholder="8자 이상, 특수문자 조합"
+                          value={signUpPassword}
+                          onChange={(e) => setSignUpPassword(e.target.value)}
+                          className={`w-full p-3 pr-11 rounded-xl border text-xs focus:outline-none transition-all ${
+                            signUpPassword
+                              ? isPwValid
+                                ? 'border-emerald-500 bg-emerald-50/20'
+                                : 'border-amber-400 bg-amber-50/20'
+                              : 'border-[#E8DFD5] focus:border-[#0B318F]'
+                          }`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPw(!showPw)}
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0B318F] text-xs font-bold"
+                          title={showPw ? '비밀번호 숨기기' : '비밀번호 보기'}
+                        >
+                          {showPw ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                      </div>
+
+                      {/* Password Requirements Badges */}
+                      <div className="flex gap-3 text-[11px] text-gray-400">
+                        <span className={hasMinLength ? 'text-emerald-600 font-bold' : ''}>
+                          {hasMinLength ? '✓ 8자 이상' : '○ 8자 이상'}
+                        </span>
+                        <span className={hasSpecialChar ? 'text-emerald-600 font-bold' : ''}>
+                          {hasSpecialChar ? '✓ 특수문자 포함' : '○ 특수문자 포함'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Confirm Password Input */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1 flex justify-between items-center">
+                        <span>비밀번호 확인 <span className="text-rose-500">*</span></span>
+                        {signUpConfirmPassword && (
+                          <span className={`text-[11px] ${isPwMatch ? 'text-emerald-600 font-bold' : 'text-rose-500'}`}>
+                            {isPwMatch ? '✓ 비밀번호 일치' : '✕ 비밀번호 불일치'}
+                          </span>
+                        )}
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showConfirmPw ? 'text' : 'password'}
+                          required
+                          placeholder="비밀번호 재입력"
+                          value={signUpConfirmPassword}
+                          onChange={(e) => setSignUpConfirmPassword(e.target.value)}
+                          className={`w-full p-3 pr-11 rounded-xl border text-xs focus:outline-none transition-all ${
+                            signUpConfirmPassword
+                              ? isPwMatch
+                                ? 'border-emerald-500 bg-emerald-50/20'
+                                : 'border-rose-400 bg-rose-50/20'
+                              : 'border-[#E8DFD5] focus:border-[#0B318F]'
+                          }`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPw(!showConfirmPw)}
+                          className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0B318F] text-xs font-bold"
+                        >
+                          {showConfirmPw ? '👁️' : '👁️‍🗨️'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Name (Nickname) */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1">
+                        이름 (닉네임) <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="홍길동"
+                        value={signUpName}
+                        onChange={(e) => setSignUpName(e.target.value)}
+                        className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                      />
+                    </div>
+
+                    {/* Phone Number with Auto Formatter */}
+                    <div>
+                      <label className="block text-xs font-bold text-[#2C2825] mb-1 flex justify-between items-center">
+                        <span>휴대폰 번호 <span className="text-rose-500">*</span></span>
+                        {signUpPhone && (
+                          <span className={`text-[11px] ${isPhoneValid ? 'text-emerald-600 font-bold' : 'text-gray-400'}`}>
+                            {isPhoneValid ? '✓ 전화번호 확인' : '숫자만 입력'}
+                          </span>
+                        )}
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        maxLength={13}
+                        placeholder="010-1234-5678"
+                        value={signUpPhone}
+                        onChange={handlePhoneInput}
+                        className="w-full p-3 rounded-xl border border-[#E8DFD5] text-xs focus:outline-none focus:border-[#0B318F]"
+                      />
+                    </div>
+
+                    {/* Terms Agreement Section */}
+                    <div className="pt-3 border-t border-[#E8DFD5] space-y-2">
+                      <label className="flex items-center gap-2 p-2.5 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={agreeAll}
+                          onChange={toggleAgreeAll}
+                          className="w-4 h-4 text-[#0B318F] rounded"
+                        />
+                        <span className="text-xs font-bold text-[#2C2825]">
+                          전체 동의하기 (선택 약관 포함)
+                        </span>
+                      </label>
+
+                      <div className="flex items-center justify-between text-xs px-1">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            required
+                            checked={agreeTerms}
+                            onChange={(e) => setAgreeTerms(e.target.checked)}
+                            className="w-3.5 h-3.5 text-[#0B318F] rounded"
+                          />
+                          <span><strong className="text-[#0B318F]">[필수]</strong> 이용약관 동의</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setShowTermsDetail(showTermsDetail === 'terms' ? null : 'terms')}
+                          className="text-[11px] text-gray-400 underline"
+                        >
+                          내용보기
+                        </button>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs px-1">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            required
+                            checked={agreePrivacy}
+                            onChange={(e) => setAgreePrivacy(e.target.checked)}
+                            className="w-3.5 h-3.5 text-[#0B318F] rounded"
+                          />
+                          <span><strong className="text-[#0B318F]">[필수]</strong> 개인정보 수집 및 이용 동의</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setShowTermsDetail(showTermsDetail === 'privacy' ? null : 'privacy')}
+                          className="text-[11px] text-gray-400 underline"
+                        >
+                          내용보기
+                        </button>
+                      </div>
+
+                      {/* Optional Marketing Agreement */}
+                      <div className="px-1 space-y-1 pt-1">
+                        <label className="flex items-center gap-2 cursor-pointer text-xs">
+                          <input
+                            type="checkbox"
+                            checked={agreeMarketing}
+                            onChange={(e) => setAgreeMarketing(e.target.checked)}
+                            className="w-3.5 h-3.5 text-[#0B318F] rounded"
+                          />
+                          <span>[선택] 마케팅 정보 수신 동의</span>
+                        </label>
+
+                        {agreeMarketing && (
+                          <div className="flex gap-3 pl-5 text-[11px] text-[#6E6862]">
+                            <label className="flex items-center gap-1 cursor-pointer">
+                              <input type="checkbox" checked={mktSms} onChange={e=>setMktSms(e.target.checked)} /> SMS
+                            </label>
+                            <label className="flex items-center gap-1 cursor-pointer">
+                              <input type="checkbox" checked={mktEmail} onChange={e=>setMktEmail(e.target.checked)} /> 이메일
+                            </label>
+                            <label className="flex items-center gap-1 cursor-pointer">
+                              <input type="checkbox" checked={mktKakao} onChange={e=>setMktKakao(e.target.checked)} /> 카카오 알림톡
+                            </label>
+                          </div>
+                        )}
+                      </div>
+
+                      {showTermsDetail && (
+                        <div className="p-2.5 bg-[#FAF6F0] rounded-xl border text-[11px] text-[#6E6862] leading-relaxed max-h-24 overflow-y-auto">
+                          {showTermsDetail === 'terms' ? (
+                            <p><strong>[이용약관]</strong> 바더만 자사몰 회원 이용 규정 및 오가닉 텐실 스카프 배송 규정을 준수합니다.</p>
+                          ) : (
+                            <p><strong>[개인정보 수집 동의]</strong> 수집 항목: 이메일, 성명, 연락처. 보유 기간: 회원 탈퇴 시 즉시 파기.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Sign Up Submit Button - Enabled ONLY when isSignUpFormValid */}
+                    <button
+                      type="submit"
+                      disabled={!isSignUpFormValid || authLoading}
+                      className={`w-full py-3.5 rounded-xl font-bold text-xs shadow-md transition-all ${
+                        isSignUpFormValid && !authLoading
+                          ? 'bg-[#0B318F] hover:bg-[#082672] text-white shadow-lg cursor-pointer'
+                          : 'bg-gray-200 text-gray-400 cursor-not-allowed border border-gray-300'
+                      }`}
+                    >
+                      {authLoading ? '회원가입 처리 중...' : '바더만 회원가입 완료하기'}
+                    </button>
+
+                    <div className="text-center pt-2 border-t border-[#E8DFD5]">
+                      <span className="text-xs text-[#6E6862]">
+                        이미 계정이 있으신가요?{' '}
+                        <button
+                          type="button"
+                          onClick={() => { setAuthMode('login'); setAuthMsg({ type: '', text: '' }); }}
+                          className="text-[#0B318F] font-bold underline ml-1"
+                        >
+                          로그인
+                        </button>
+                      </span>
+                    </div>
+                  </form>
+                )}
               </div>
             </div>
           )}

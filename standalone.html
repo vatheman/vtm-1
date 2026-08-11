@@ -98,6 +98,54 @@
       const [authLoading, setAuthLoading] = useState(false);
       const [authMsg, setAuthMsg] = useState({ type: '', text: '' });
 
+      // Detailed SignUp Form States & Validations
+      const [signUpEmail, setSignUpEmail] = useState('');
+      const [signUpPassword, setSignUpPassword] = useState('');
+      const [signUpConfirmPassword, setSignUpConfirmPassword] = useState('');
+      const [signUpName, setSignUpName] = useState('');
+      const [signUpPhone, setSignUpPhone] = useState('');
+
+      const [showPw, setShowPw] = useState(false);
+      const [showConfirmPw, setShowConfirmPw] = useState(false);
+
+      const [agreeTerms, setAgreeTerms] = useState(false);
+      const [agreePrivacy, setAgreePrivacy] = useState(false);
+      const [agreeMarketing, setAgreeMarketing] = useState(false);
+      const [mktSms, setMktSms] = useState(true);
+      const [mktEmail, setMktEmail] = useState(true);
+      const [mktKakao, setMktKakao] = useState(true);
+      const [showTermsDetail, setShowTermsDetail] = useState(null);
+
+      const agreeAll = agreeTerms && agreePrivacy && agreeMarketing;
+      const toggleAgreeAll = (e) => {
+        const val = e.target.checked;
+        setAgreeTerms(val);
+        setAgreePrivacy(val);
+        setAgreeMarketing(val);
+      };
+
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signUpEmail);
+      const hasMinLength = signUpPassword.length >= 8;
+      const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/test(signUpPassword);
+      const isPwValid = hasMinLength && hasSpecialChar;
+      const isPwMatch = signUpConfirmPassword !== '' && signUpConfirmPassword === signUpPassword;
+      const isNameValid = signUpName.trim().length >= 2;
+      const rawPhone = signUpPhone.replace(/[^0-9]/g, '');
+      const isPhoneValid = rawPhone.length === 10 || rawPhone.length === 11;
+
+      const isSignUpFormValid = isEmailValid && isPwValid && isPwMatch && isNameValid && isPhoneValid && agreeTerms && agreePrivacy;
+
+      const handlePhoneInput = (e) => {
+        const num = e.target.value.replace(/[^0-9]/g, '');
+        let formatted = num;
+        if (num.length > 3 && num.length <= 7) {
+          formatted = `${num.slice(0, 3)}-${num.slice(3)}`;
+        } else if (num.length > 7) {
+          formatted = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+        }
+        setSignUpPhone(formatted);
+      };
+
       useEffect(() => {
         if (!supabaseClient) return;
         supabaseClient.auth.getSession().then(({ data: { session } }) => {
@@ -130,12 +178,25 @@
               setAuthMsg({ type: '', text: '' });
             }, 1000);
           } else {
+            if (!isSignUpFormValid) return;
             const { error } = await supabaseClient.auth.signUp({
-              email: authEmail,
-              password: authPassword,
+              email: signUpEmail,
+              password: signUpPassword,
+              options: {
+                data: {
+                  full_name: signUpName,
+                  phone_number: signUpPhone,
+                  agree_marketing: agreeMarketing,
+                  marketing_channels: { sms: mktSms, email: mktEmail, kakao: mktKakao }
+                }
+              }
             });
             if (error) throw error;
-            setAuthMsg({ type: 'success', text: '회원가입 신청이 완료되었습니다!' });
+            setAuthMsg({ type: 'success', text: '🎉 바더만 회원가입이 완료되었습니다! 로그인해 주세요.' });
+            setTimeout(() => {
+              setAuthMode('login');
+              setAuthMsg({ type: '', text: '' });
+            }, 1800);
           }
         } catch (err) {
           setAuthMsg({ type: 'error', text: err.message || '인증 처리에 실패했습니다.' });
@@ -473,11 +534,11 @@
             </div>
           </section>
 
-          {/* Auth Modal with Real Supabase Backend Integration */}
+          {/* Auth Modal with Real Supabase Backend Integration & Full SignUp Form */}
           {isAuthOpen && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
-              <div className="bg-white rounded-2xl p-8 max-w-sm w-full relative border border-[#E8DFD5] shadow-2xl text-left">
-                <button onClick={() => setIsAuthOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in overflow-y-auto">
+              <div className={`bg-white rounded-3xl p-6 sm:p-8 w-full relative border border-[#E8DFD5] shadow-2xl text-left my-8 transition-all ${authMode === 'signup' ? 'max-w-md' : 'max-w-sm'}`}>
+                <button onClick={() => setIsAuthOpen(false)} className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
                 
                 <div className="h-10 overflow-hidden relative flex items-center justify-center mb-3 mx-auto w-32">
                   <img 
@@ -491,7 +552,7 @@
                 <div className="flex justify-center items-center gap-1 mb-4">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                   <span className="text-[11px] text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                    ⚡ Supabase Project Connected (hccxdafqavxioxnksgsy)
+                    ⚡ Supabase Connected (hccxdafqavxioxnksgsy)
                   </span>
                 </div>
 
@@ -516,12 +577,6 @@
                   </div>
                 )}
 
-                <form onSubmit={handleAuthSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#2C2825] mb-1">이메일 주소</label>
-                    <input
-                      type="email"
-                      required
                       placeholder="vatheman@example.com"
                       value={authEmail}
                       onChange={(e) => setAuthEmail(e.target.value)}
