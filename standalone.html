@@ -907,11 +907,20 @@
       );
     }
 
-    const container = document.getElementById('root');
-    if (ReactDOM.createRoot) {
-      ReactDOM.createRoot(container).render(<App />);
+    function mountApp() {
+      const container = document.getElementById('root');
+      if (!container) return;
+      if (typeof ReactDOM !== 'undefined' && ReactDOM.createRoot) {
+        ReactDOM.createRoot(container).render(<App />);
+      } else if (typeof ReactDOM !== 'undefined') {
+        ReactDOM.render(<App />, container);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', mountApp);
     } else {
-      ReactDOM.render(<App />, container);
+      mountApp();
     }
   </script>
 </body>
