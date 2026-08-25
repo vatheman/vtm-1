@@ -1,8 +1,8 @@
-import React from 'react';
-import { Instagram, Heart, MessageCircle, ExternalLink, Star, Quote } from 'lucide-react';
+import React, { memo } from 'react';
+import { Instagram, Heart, MessageCircle, Star, Quote } from 'lucide-react';
 import { INSTAGRAM_POSTS, BRAND_INFO } from '../data/dummyData';
 
-export function InstagramFeed() {
+export const InstagramFeed = memo(function InstagramFeed() {
   return (
     <section className="py-20 bg-[#FAF6F0] border-b border-[#E8DFD5]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -28,6 +28,7 @@ export function InstagramFeed() {
               <img
                 src={post.image}
                 alt="Instagram post"
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-4">
@@ -43,9 +44,9 @@ export function InstagramFeed() {
       </div>
     </section>
   );
-}
+});
 
-export function ReviewSection() {
+export const ReviewSection = memo(function ReviewSection() {
   const reviews = [
     {
       id: 1,
@@ -114,4 +115,4 @@ export function ReviewSection() {
       </div>
     </section>
   );
-}
+});

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Sparkles, CheckCircle2 } from 'lucide-react';
 
-export default function CraftProcess() {
+const CraftProcess = memo(function CraftProcess() {
   const steps = [
     { num: "01", title: "천연 염재 추출 & 발효", desc: "청정 자연에서 수확한 풋감, 쪽, 쑥 등을 아틀리에 고유 방식으로 발효/수액 추출" },
     { num: "02", title: "원단 수작업 다듬기", desc: "100% 오가닉 린넨 및 실크 원사를 천연 성분으로 불순물 세척 후 염색 준비" },
@@ -11,7 +11,7 @@ export default function CraftProcess() {
 
   return (
     <section id="craft" className="py-20 bg-[#F5F0E6] border-b border-[#E8DFD5] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Image Side */}
           <div className="lg:col-span-5 relative">
@@ -19,6 +19,7 @@ export default function CraftProcess() {
               <img
                 src="/assets/images/craft.png"
                 alt="자연염색 공정 장인손길"
+                loading="lazy"
                 className="w-full h-[450px] object-cover"
               />
               <div className="absolute top-4 right-4 bg-[#8C533E] text-white px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-md flex items-center gap-1.5">
@@ -64,4 +65,6 @@ export default function CraftProcess() {
       </div>
     </section>
   );
-}
+});
+
+export default CraftProcess;

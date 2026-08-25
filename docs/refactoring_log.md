@@ -24,6 +24,7 @@
 - `App.jsx` 내 핸들러 함수들(`navigateTo`, `handleAddToCart`, `handleRemoveFromCart`, `handleClearCart`, `handleLogout`)에 `useCallback` 적용
 - 장바구니 수량 연산(`totalCartCount`) 및 상품 목록 카테고리 필터링(`filteredProducts`)에 `useMemo` 적용
 - `ProductCatalog.jsx` 내 `ProductCard` 컴포넌트 추출 및 `React.memo` 적용 + 이미지 `loading="lazy"` 속성 추가로 불필요한 전체 카드 리렌더링 완벽 차단
+- `InstagramFeed.jsx` (`InstagramFeed`, `ReviewSection`) 및 `CraftProcess.jsx` 컴포넌트에 `React.memo` 및 이미지 비동기 지연 로딩(`loading="lazy"`) 적용
 - `CustomerTab.jsx` 내 5대 필터 연산, 다중 선택 상태 연산(`isAllFilteredSelected`, `selectedCustomerObjects`), 총계 통계 집계(`totalCustomerCount`, `totalCumulativeSales`, `totalPointsIssued`)에 `useMemo` 적용
 - `CustomerTab.jsx` 이벤트 핸들러(`handleGrantPoints`, `handleResetFilters`, `toggleSelectAll`, `toggleSelectCustomer`, `handleOpenBatchMsg`, `handleMessageSuccess`)에 `useCallback` 적용으로 자식 컴포넌트 및 모달 불필요 리렌더링 차단
 
