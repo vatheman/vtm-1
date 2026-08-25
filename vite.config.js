@@ -7,5 +7,19 @@ export default defineConfig({
   server: {
     port: 3000,
     open: false
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'lucide': ['lucide-react'],
+          'supabase': ['@supabase/supabase-js'],
+          'recharts': ['recharts']
+        }
+      }
+    }
   }
 })
+

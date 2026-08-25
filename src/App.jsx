@@ -8,8 +8,9 @@ import ProductModal from './components/ProductModal';
 import { InstagramFeed, ReviewSection } from './components/InstagramFeed';
 import { CartDrawer, Footer } from './components/CartDrawer';
 import AuthModal from './components/AuthModal';
-import AdminLayout from './admin/AdminLayout';
 import { supabase } from './lib/supabaseClient';
+
+const AdminLayout = React.lazy(() => import('./admin/AdminLayout'));
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
@@ -49,13 +50,13 @@ export default function App() {
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
-  const navigateTo = (path) => {
+  const navigateTo = React.useCallback((path) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = React.useCallback((product) => {
     setCartItems(prev => {
       const existing = prev.find(item => item.id === product.id);
       if (existing) {
@@ -64,32 +65,48 @@ export default function App() {
       return [...prev, { ...product, quantity: 1 }];
     });
     setIsCartOpen(true);
-  };
+  }, []);
 
-  const handleRemoveFromCart = (id) => {
+  const handleRemoveFromCart = React.useCallback((id) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
-  };
+  }, []);
 
-  const handleClearCart = () => {
+  const handleClearCart = React.useCallback(() => {
     setCartItems([]);
-  };
+  }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = React.useCallback(async () => {
     await supabase.auth.signOut();
     setSession(null);
-  };
+  }, []);
 
-  // If path starts with /admin, render Admin Panel Layout
+  const totalCartCount = React.useMemo(() => {
+    return cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  }, [cartItems]);
+
+  // If path starts with /admin, render Admin Panel Layout with Suspense
   if (currentPath.startsWith('/admin')) {
-    return <AdminLayout onNavigateHome={() => navigateTo('/')} />;
+    return (
+      <React.Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF6F0]">
+          <div className="text-center font-bold text-[#0B318F] flex flex-col items-center gap-3">
+            <div className="w-8 h-8 border-4 border-[#0B318F] border-t-transparent rounded-full animate-spin"></div>
+            <span>관리자 시스템 로딩 중...</span>
+          </div>
+        </div>
+      }>
+        <AdminLayout onNavigateHome={() => navigateTo('/')} />
+      </React.Suspense>
+    );
   }
+
 
   // Otherwise, render Brand Homepage
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#2C2825]">
       {/* Brand Header */}
       <Header
-        cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+        cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
         currentPath={currentPath}

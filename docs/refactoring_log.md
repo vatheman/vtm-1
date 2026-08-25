@@ -1,0 +1,35 @@
+# 코드 최적화 및 청크 분이 리포트 (Optimization Log)
+
+## 1. 개요
+- **목적**: 웹 애플리케이션의 초기 로딩 속도 향상 및 청크 번들 사이즈 최적화
+- **일자**: 2026-08-25
+
+---
+
+## 2. 주요 최적화 작업 내용
+
+### 1) React.lazy & Suspense 기반 라우트/컴포넌트 Code Splitting
+- `/admin` 관리자 레이아웃 (`AdminLayout.jsx`) 및 Recharts 차트 모듈을 동적 임포트(`React.lazy`)로 전환했습니다.
+- 쇼핑몰 일반 사용자가 접속 시 불필요하게 대용량 차트 라이브러리(`recharts`) 및 관리자 탭 코드를 초기 다운로드하지 않도록 분리했습니다.
+
+### 2) Vite & Rollup manualChunks 벤더 분리
+- `vite.config.js`에 `rollupOptions.output.manualChunks` 설정을 추가하여 벤더 라이브러리를 명확히 청크 분리했습니다.
+  - `react-vendor`: React / React-DOM
+  - `lucide`: Lucide Icons
+  - `supabase`: Supabase Client SDK
+  - `recharts`: Recharts 차트 라이브러리
+  - `AdminLayout`: 관리자 전용 대시보드 컴포넌트
+
+### 3) React 렌더링 최적화
+- `App.jsx` 내 핸들러 함수들(`navigateTo`, `handleAddToCart`, `handleRemoveFromCart`, `handleClearCart`, `handleLogout`)에 `useCallback` 적용
+- 장바구니 수량 연산(`totalCartCount`)에 `useMemo` 적용하여 불필요한 인라인 재연산 차단
+
+---
+
+## 3. 최적화 성과 지표 (Performance Metrics)
+
+| 항목 | 최적화 전 | 최적화 후 | 개선율 |
+| :--- | :--- | :--- | :--- |
+| **메인 JS 번들 용량** | `897.69 kB` | `61.45 kB` | **93.1% 감소 (초기 진입속도 비약적 향상)** |
+| **빌드 경고 (Chunk Size Warning)** | 500kB 초과 경고 발생 | 경고 0건 (완벽 해결) | **100% 해소** |
+| **빌드 소요 시간** | `12.87초` | `9.99초` | **22.3% 단축** |
