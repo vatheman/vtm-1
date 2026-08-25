@@ -174,15 +174,15 @@ export default function ReportsTab() {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs">
             {/* 자사몰 버튼 */}
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-              <span className="text-[#6E6862] font-medium">자사몰 바로가기:</span>
+            <div className="flex items-center gap-2.5 w-full md:w-auto">
+              <span className="text-[#6E6862] font-semibold whitespace-nowrap shrink-0">자사몰 바로가기:</span>
               <a
-                href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+                href="https://vatheman.com/shop_all"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-[#C47B59] hover:bg-[#8C533E] text-white font-bold transition-all shadow-2xs flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-xl bg-[#C47B59] hover:bg-[#8C533E] text-white font-bold transition-all shadow-xs flex items-center gap-1.5 whitespace-nowrap shrink-0"
               >
                 <span>vatheman.com/shop_all</span>
                 <ExternalLink size={13} />
@@ -190,13 +190,13 @@ export default function ReportsTab() {
             </div>
 
             {/* 스마트스토어 버튼 */}
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-              <span className="text-[#6E6862] font-medium">스마트스토어 연동:</span>
+            <div className="flex items-center gap-2.5 w-full md:w-auto">
+              <span className="text-[#6E6862] font-semibold whitespace-nowrap shrink-0">스마트스토어 연동:</span>
               <a
                 href={BRAND_INFO.smartstoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-lg bg-[#03C75A] hover:bg-[#02b351] text-white font-bold transition-all shadow-2xs flex items-center gap-1.5"
+                className="px-3.5 py-1.5 rounded-xl bg-[#03C75A] hover:bg-[#02b351] text-white font-bold transition-all shadow-xs flex items-center gap-1.5 whitespace-nowrap shrink-0"
               >
                 <span>smartstore.naver.com/vatheman</span>
                 <ExternalLink size={13} />

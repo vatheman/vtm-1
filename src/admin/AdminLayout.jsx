@@ -90,10 +90,10 @@ export default function AdminLayout({ onNavigateHome }) {
         <div className="p-4 border-t border-[#3B3632] space-y-2">
           {/* vatheman.com/shop_all button */}
           <a
-            href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+            href="https://vatheman.com/shop_all"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-2.5 px-3 rounded-xl bg-[#C47B59] hover:bg-[#A35C3A] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border border-[#D98E6C]"
+            className="w-full py-2.5 px-3 rounded-xl bg-[#C47B59] hover:bg-[#A35C3A] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border border-[#D98E6C] whitespace-nowrap"
           >
             <ShoppingBag size={15} />
             <span>자사몰 바로가기 (/shop_all)</span>
@@ -102,7 +102,7 @@ export default function AdminLayout({ onNavigateHome }) {
 
           <button
             onClick={onNavigateHome}
-            className="w-full py-2.5 rounded-xl bg-[#3B3632] hover:bg-[#4E4742] text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-[#524B46]"
+            className="w-full py-2.5 rounded-xl bg-[#3B3632] hover:bg-[#4E4742] text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-[#524B46] whitespace-nowrap"
           >
             <ArrowLeft size={15} />
             <span>홈페이지 메인 이동</span>
@@ -129,10 +129,10 @@ export default function AdminLayout({ onNavigateHome }) {
           <div className="flex items-center gap-3 sm:gap-4">
             {/* 자사몰 직통 링크 버튼 (vatheman.com/shop_all) */}
             <a
-              href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+              href="https://vatheman.com/shop_all"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-1.5 rounded-full bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs"
+              className="px-3.5 py-1.5 rounded-full bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs whitespace-nowrap"
             >
               <ShoppingBag size={14} />
               <span className="hidden md:inline">자사몰 바로가기:</span>
