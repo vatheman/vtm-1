@@ -41,7 +41,7 @@ export default function SignUp({ onSwitchToLogin, onClose }) {
   // Field validations
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const hasMinLength = password.length >= 8;
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/ .test(password);
   const isPasswordValid = hasMinLength && hasSpecialChar;
   const isPasswordMatch = confirmPassword !== '' && confirmPassword === password;
   const isNameValid = name.trim().length >= 2;
