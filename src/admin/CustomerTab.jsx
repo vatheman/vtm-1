@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { 
   Users, DollarSign, Award, Gift, Search, Filter, RefreshCw, Eye, PlusCircle, ArrowUpDown,
   Mail, MessageSquare, Smartphone, Send, CheckSquare, Square, Check, X
@@ -29,14 +29,14 @@ export default function CustomerTab() {
   const [toastMsg, setToastMsg] = useState('');
 
   // Point Grant handler
-  const handleGrantPoints = (customerId, amount) => {
+  const handleGrantPoints = useCallback((customerId, amount) => {
     setCustomers(prev =>
       prev.map(c => c.id === customerId ? { ...c, points: c.points + amount } : c)
     );
-  };
+  }, []);
 
   // Reset Filters
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setGenderFilter('전체');
     setAgeFilter('전체');
     setTierFilter('전체');
@@ -44,7 +44,7 @@ export default function CustomerTab() {
     setAmountFilter('전체');
     setSearchQuery('');
     setSelectedIds([]);
-  };
+  }, []);
 
   // Filter Engine
   const filteredCustomers = useMemo(() => {
@@ -89,22 +89,27 @@ export default function CustomerTab() {
   }, [customers, genderFilter, ageFilter, tierFilter, freqFilter, amountFilter, searchQuery, sortBy]);
 
   // Checkbox Selection Logic
-  const isAllFilteredSelected = filteredCustomers.length > 0 && filteredCustomers.every(c => selectedIds.includes(c.id));
+  const isAllFilteredSelected = useMemo(() => {
+    return filteredCustomers.length > 0 && filteredCustomers.every(c => selectedIds.includes(c.id));
+  }, [filteredCustomers, selectedIds]);
 
-  const toggleSelectAll = () => {
-    if (isAllFilteredSelected) {
-      setSelectedIds(prev => prev.filter(id => !filteredCustomers.some(c => c.id === id)));
-    } else {
-      const filteredIdList = filteredCustomers.map(c => c.id);
-      setSelectedIds(prev => Array.from(new Set([...prev, ...filteredIdList])));
-    }
-  };
+  const toggleSelectAll = useCallback(() => {
+    setSelectedIds(prev => {
+      const allSelected = filteredCustomers.length > 0 && filteredCustomers.every(c => prev.includes(c.id));
+      if (allSelected) {
+        return prev.filter(id => !filteredCustomers.some(c => c.id === id));
+      } else {
+        const filteredIdList = filteredCustomers.map(c => c.id);
+        return Array.from(new Set([...prev, ...filteredIdList]));
+      }
+    });
+  }, [filteredCustomers]);
 
-  const toggleSelectCustomer = (id) => {
+  const toggleSelectCustomer = useCallback((id) => {
     setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     );
-  };
+  }, []);
 
   // Get selected customers objects
   const selectedCustomerObjects = useMemo(() => {
@@ -112,22 +117,21 @@ export default function CustomerTab() {
   }, [customers, selectedIds]);
 
   // Open Batch Message Modal for channel
-  const handleOpenBatchMsg = (channel) => {
-    if (selectedIds.length === 0) return;
+  const handleOpenBatchMsg = useCallback((channel) => {
     setBatchMsgState({ isOpen: true, channel });
-  };
+  }, []);
 
-  const handleMessageSuccess = ({ channel, count, title }) => {
+  const handleMessageSuccess = useCallback(({ channel, count, title }) => {
     const channelNameMap = { kakao: '카카오 알림톡', sms: 'SMS 문자', email: '이메일' };
     setToastMsg(`🎉 ${count}명의 선택 고객에게 [${channelNameMap[channel]}] 발송 요청이 정상 완료되었습니다!`);
     setSelectedIds([]);
     setTimeout(() => setToastMsg(''), 4000);
-  };
+  }, []);
 
   // Key Overview Aggregations
-  const totalCustomerCount = customers.length;
-  const totalCumulativeSales = customers.reduce((sum, c) => sum + c.totalAmount, 0);
-  const totalPointsIssued = customers.reduce((sum, c) => sum + c.points, 0);
+  const totalCustomerCount = useMemo(() => customers.length, [customers]);
+  const totalCumulativeSales = useMemo(() => customers.reduce((sum, c) => sum + c.totalAmount, 0), [customers]);
+  const totalPointsIssued = useMemo(() => customers.reduce((sum, c) => sum + c.points, 0), [customers]);
 
   return (
     <div className="space-y-8 animate-fade-in text-left">

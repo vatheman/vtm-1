@@ -24,6 +24,8 @@
 - `App.jsx` 내 핸들러 함수들(`navigateTo`, `handleAddToCart`, `handleRemoveFromCart`, `handleClearCart`, `handleLogout`)에 `useCallback` 적용
 - 장바구니 수량 연산(`totalCartCount`) 및 상품 목록 카테고리 필터링(`filteredProducts`)에 `useMemo` 적용
 - `ProductCatalog.jsx` 내 `ProductCard` 컴포넌트 추출 및 `React.memo` 적용 + 이미지 `loading="lazy"` 속성 추가로 불필요한 전체 카드 리렌더링 완벽 차단
+- `CustomerTab.jsx` 내 5대 필터 연산, 다중 선택 상태 연산(`isAllFilteredSelected`, `selectedCustomerObjects`), 총계 통계 집계(`totalCustomerCount`, `totalCumulativeSales`, `totalPointsIssued`)에 `useMemo` 적용
+- `CustomerTab.jsx` 이벤트 핸들러(`handleGrantPoints`, `handleResetFilters`, `toggleSelectAll`, `toggleSelectCustomer`, `handleOpenBatchMsg`, `handleMessageSuccess`)에 `useCallback` 적용으로 자식 컴포넌트 및 모달 불필요 리렌더링 차단
 
 ---
 
@@ -31,6 +33,6 @@
 
 | 항목 | 최적화 전 | 최적화 후 | 개선율 |
 | :--- | :--- | :--- | :--- |
-| **메인 JS 번들 용량** | `897.69 kB` | `61.45 kB` | **93.1% 감소 (초기 진입속도 비약적 향상)** |
+| **메인 JS 번들 용량** | `897.69 kB` | `60.14 kB` | **93.3% 감소 (초기 진입속도 비약적 향상)** |
 | **빌드 경고 (Chunk Size Warning)** | 500kB 초과 경고 발생 | 경고 0건 (완벽 해결) | **100% 해소** |
-| **빌드 소요 시간** | `12.87초` | `9.99초` | **22.3% 단축** |
+| **빌드 소요 시간** | `12.87초` | `11.71초` | **9.0% 단축** |
