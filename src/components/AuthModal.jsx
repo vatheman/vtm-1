@@ -152,27 +152,6 @@ export default function AuthModal({ isOpen, onClose }) {
             <ArrowRight size={16} />
           </button>
         </form>
-
-        {/* Easy Social Login */}
-        <div className="mt-6 pt-5 border-t border-[#E8DFD5] text-center">
-          <span className="text-[11px] text-gray-400 block mb-2.5">소셜 계정 간편 로그인</span>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setNoticeMsg({ type: 'success', text: "네이버 로그인 (Supabase OAuth 2.0 연동)" })}
-              className="flex-1 py-2.5 rounded-xl bg-[#03C75A] text-white text-xs font-bold hover:opacity-90 transition-opacity"
-            >
-              네이버
-            </button>
-            <button
-              type="button"
-              onClick={() => setNoticeMsg({ type: 'success', text: "카카오 로그인 (Supabase OAuth 2.0 연동)" })}
-              className="flex-1 py-2.5 rounded-xl bg-[#FEE500] text-[#191919] text-xs font-bold hover:opacity-90 transition-opacity"
-            >
-              카카오
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
