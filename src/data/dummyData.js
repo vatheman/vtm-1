@@ -4,8 +4,10 @@ export const BRAND_INFO = {
   slogan: "자연소재 자연빛깔 자연염색 브랜드",
   subSlogan: "핸드메이드 / 자연(천연)염색 / 생활용품 / 바른가치를 더해 만드는 선물",
   officialUrl: "https://vatheman.com/",
+  shopAllUrl: "https://vatheman.com/shop_all",
   smartstoreUrl: "https://smartstore.naver.com/vatheman",
   instagramUrl: "https://www.instagram.com/vatheman_/",
+  instagram: "@vatheman_",
   youtubeUrl: "https://www.youtube.com/@vatheman_",
   blogUrl: "https://blog.naver.com/vatheman",
   csPhone: "070-8095-2340",
@@ -14,6 +16,37 @@ export const BRAND_INFO = {
   shippingInfo: "70,000원 이상 구매 시 무료배송 (기본 배송비 3,500원)",
   email: "contact@vatheman.com"
 };
+
+export const INSTAGRAM_POSTS = [
+  {
+    id: 1,
+    image: "/assets/images/product1.png",
+    likes: 124,
+    comments: 18,
+    tag: "#바더만 #풋감염색 #텐실스카프"
+  },
+  {
+    id: 2,
+    image: "/assets/images/hero.png",
+    likes: 215,
+    comments: 32,
+    tag: "#쪽염색 #자연빛깔 #핸드메이드"
+  },
+  {
+    id: 3,
+    image: "/assets/images/product2.png",
+    likes: 98,
+    comments: 12,
+    tag: "#사각텐실 #자연소재 #선물추천"
+  },
+  {
+    id: 4,
+    image: "/assets/images/craft.png",
+    likes: 176,
+    comments: 24,
+    tag: "#아틀리에 #자연염색공방 #의정부"
+  }
+];
 
 export const MENU_ITEMS = [
   {

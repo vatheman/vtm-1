@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { 
-  LayoutDashboard, Users, BarChart3, ArrowLeft, ShieldCheck, Bell, Search, UserCheck, ChevronRight 
+  LayoutDashboard, Users, BarChart3, ArrowLeft, ShieldCheck, Bell, Search, UserCheck, ChevronRight, ExternalLink, ShoppingBag 
 } from 'lucide-react';
 import DashboardTab from './DashboardTab';
 import CustomerTab from './CustomerTab';
 import ReportsTab from './ReportsTab';
+import { BRAND_INFO } from '../data/dummyData';
 
 export default function AdminLayout({ onNavigateHome }) {
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'customers' | 'reports'
@@ -85,14 +86,26 @@ export default function AdminLayout({ onNavigateHome }) {
           </nav>
         </div>
 
-        {/* Bottom Switcher */}
-        <div className="p-4 border-t border-[#3B3632]">
+        {/* Bottom Switcher & Shop All Direct Link */}
+        <div className="p-4 border-t border-[#3B3632] space-y-2">
+          {/* vatheman.com/shop_all button */}
+          <a
+            href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-2.5 px-3 rounded-xl bg-[#C47B59] hover:bg-[#A35C3A] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm border border-[#D98E6C]"
+          >
+            <ShoppingBag size={15} />
+            <span>자사몰 바로가기 (/shop_all)</span>
+            <ExternalLink size={12} />
+          </a>
+
           <button
             onClick={onNavigateHome}
-            className="w-full py-3 rounded-xl bg-[#3B3632] hover:bg-[#C47B59] text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-[#524B46]"
+            className="w-full py-2.5 rounded-xl bg-[#3B3632] hover:bg-[#4E4742] text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 border border-[#524B46]"
           >
-            <ArrowLeft size={16} />
-            <span>브랜드 홈페이지로 돌아가기</span>
+            <ArrowLeft size={15} />
+            <span>홈페이지 메인 이동</span>
           </button>
         </div>
       </aside>
@@ -113,13 +126,26 @@ export default function AdminLayout({ onNavigateHome }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative hidden sm:block">
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* 자사몰 직통 링크 버튼 (vatheman.com/shop_all) */}
+            <a
+              href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3.5 py-1.5 rounded-full bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-xs font-bold transition-colors flex items-center gap-1.5 shadow-2xs"
+            >
+              <ShoppingBag size={14} />
+              <span className="hidden md:inline">자사몰 바로가기:</span>
+              <span>vatheman.com/shop_all</span>
+              <ExternalLink size={12} />
+            </a>
+
+            <div className="relative hidden lg:block">
               <Search size={14} className="absolute left-3 top-2.5 text-[#A0AAB2]" />
               <input
                 type="text"
                 placeholder="통합 관리 검색..."
-                className="pl-8 pr-4 py-1.5 rounded-full border border-[#E8DFD5] text-xs bg-[#FAF6F0] focus:outline-none focus:border-[#8C533E] w-48"
+                className="pl-8 pr-4 py-1.5 rounded-full border border-[#E8DFD5] text-xs bg-[#FAF6F0] focus:outline-none focus:border-[#8C533E] w-44"
               />
             </div>
 

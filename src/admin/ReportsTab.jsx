@@ -174,16 +174,34 @@ export default function ReportsTab() {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] flex items-center justify-between text-xs">
-            <span className="text-[#6E6862]">스마트스토어 직통 연동:</span>
-            <a
-              href={BRAND_INFO.smartstoreUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#03C75A] font-bold hover:underline flex items-center gap-1"
-            >
-              smartstore.naver.com/vatheman <ExternalLink size={12} />
-            </a>
+          <div className="p-4 rounded-xl bg-[#FAF6F0] border border-[#E8DFD5] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            {/* 자사몰 버튼 */}
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+              <span className="text-[#6E6862] font-medium">자사몰 바로가기:</span>
+              <a
+                href={BRAND_INFO.shopAllUrl || "https://vatheman.com/shop_all"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-lg bg-[#C47B59] hover:bg-[#8C533E] text-white font-bold transition-all shadow-2xs flex items-center gap-1.5"
+              >
+                <span>vatheman.com/shop_all</span>
+                <ExternalLink size={13} />
+              </a>
+            </div>
+
+            {/* 스마트스토어 버튼 */}
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+              <span className="text-[#6E6862] font-medium">스마트스토어 연동:</span>
+              <a
+                href={BRAND_INFO.smartstoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 rounded-lg bg-[#03C75A] hover:bg-[#02b351] text-white font-bold transition-all shadow-2xs flex items-center gap-1.5"
+              >
+                <span>smartstore.naver.com/vatheman</span>
+                <ExternalLink size={13} />
+              </a>
+            </div>
           </div>
         </div>
       </div>
