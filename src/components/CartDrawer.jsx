@@ -126,14 +126,6 @@ export function Footer({ onNavigate }) {
               {BRAND_INFO.slogan}<br />
               {BRAND_INFO.subSlogan}
             </p>
-            <div className="pt-2">
-              <button
-                onClick={() => onNavigate('/admin')}
-                className="px-3 py-1.5 rounded-md bg-[#0B318F] text-white text-xs font-bold hover:bg-[#082672] transition-colors"
-              >
-                ⚙️ 관리자 시스템 (/admin)
-              </button>
-            </div>
           </div>
 
           {/* Col 2: Navigation */}

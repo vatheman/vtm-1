@@ -90,19 +90,6 @@ export default function Header({
             <ExternalLink size={12} className="text-[#0B318F]" />
           </a>
 
-          {/* Admin Switcher */}
-          <button
-            onClick={() => onNavigate('/admin')}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-all ${
-              currentPath === '/admin'
-                ? 'bg-[#D0B579] text-[#2C2825] shadow-sm'
-                : 'bg-[#1542B3] text-white hover:bg-[#D0B579] hover:text-[#2C2825] border border-white/20'
-            }`}
-          >
-            <ShieldCheck size={14} />
-            <span className="hidden sm:inline">관리자</span> (/admin)
-          </button>
-
           {/* User Login / Session */}
           {session ? (
             <div className="flex items-center gap-2">
@@ -175,13 +162,6 @@ export default function Header({
               ))}
             </div>
           ))}
-
-          <button
-            onClick={() => { onNavigate('/admin'); setMobileMenuOpen(false); }}
-            className="w-full py-2.5 rounded-xl bg-[#D0B579] text-[#2C2825] font-bold text-xs shadow-md mt-4"
-          >
-            ⚙️ 관리자페이지 접속 (/admin)
-          </button>
         </div>
       )}
     </header>
