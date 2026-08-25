@@ -60,11 +60,11 @@ export const MENU_ITEMS = [
   },
   {
     title: "SHOP",
-    link: "#shop",
+    link: "https://vatheman.com/shop_all",
     submenus: [
-      { title: "ALL (전체상품)", link: "#shop-all" },
-      { title: "롱텐실 스카프", link: "#shop-long" },
-      { title: "사각텐실 스카프", link: "#shop-square" }
+      { title: "ALL (전체상품)", link: "https://vatheman.com/shop_all" },
+      { title: "롱텐실 스카프", link: "https://vatheman.com/shop_all" },
+      { title: "사각텐실 스카프", link: "https://vatheman.com/shop_all" }
     ]
   },
   {

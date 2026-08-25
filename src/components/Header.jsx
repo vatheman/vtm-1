@@ -44,37 +44,47 @@ export default function Header({
 
         {/* Center Desktop Navigation Menu (Matching vatheman.com) */}
         <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold tracking-wider">
-          {MENU_ITEMS.map((menu, idx) => (
-            <div
-              key={idx}
-              className="relative group"
-              onMouseEnter={() => setOpenDropdown(menu.title)}
-              onMouseLeave={() => setOpenDropdown(null)}
-            >
-              <a
-                href={menu.link}
-                className="py-6 px-2 flex items-center gap-1 hover:text-[#D0B579] transition-colors"
+          {MENU_ITEMS.map((menu, idx) => {
+            const isExternal = menu.link.startsWith('http');
+            return (
+              <div
+                key={idx}
+                className="relative group"
+                onMouseEnter={() => setOpenDropdown(menu.title)}
+                onMouseLeave={() => setOpenDropdown(null)}
               >
-                <span>{menu.title}</span>
-                {menu.submenus.length > 0 && <ChevronDown size={14} className="opacity-70 group-hover:rotate-180 transition-transform" />}
-              </a>
+                <a
+                  href={menu.link}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  className="py-6 px-2 flex items-center gap-1 hover:text-[#D0B579] transition-colors"
+                >
+                  <span>{menu.title}</span>
+                  {menu.submenus.length > 0 && <ChevronDown size={14} className="opacity-70 group-hover:rotate-180 transition-transform" />}
+                </a>
 
-              {/* Submenu Dropdown */}
-              {menu.submenus.length > 0 && openDropdown === menu.title && (
-                <div className="absolute top-full left-0 w-48 bg-[#F7F2E9] text-[#2C2825] rounded-b-xl shadow-xl border border-[#E8DFD5] py-2 animate-fade-in z-50">
-                  {menu.submenus.map((sub, sIdx) => (
-                    <a
-                      key={sIdx}
-                      href={sub.link}
-                      className="block px-4 py-2.5 text-xs font-semibold hover:bg-[#0B318F] hover:text-white transition-colors"
-                    >
-                      {sub.title}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                {/* Submenu Dropdown */}
+                {menu.submenus.length > 0 && openDropdown === menu.title && (
+                  <div className="absolute top-full left-0 w-48 bg-[#F7F2E9] text-[#2C2825] rounded-b-xl shadow-xl border border-[#E8DFD5] py-2 animate-fade-in z-50">
+                    {menu.submenus.map((sub, sIdx) => {
+                      const isSubExternal = sub.link.startsWith('http');
+                      return (
+                        <a
+                          key={sIdx}
+                          href={sub.link}
+                          target={isSubExternal ? "_blank" : undefined}
+                          rel={isSubExternal ? "noopener noreferrer" : undefined}
+                          className="block px-4 py-2.5 text-xs font-semibold hover:bg-[#0B318F] hover:text-white transition-colors"
+                        >
+                          {sub.title}
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         {/* Right Actions & Buttons */}
@@ -141,27 +151,37 @@ export default function Header({
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#082672] border-t border-white/10 px-6 py-6 space-y-4 text-left animate-fade-in text-sm">
-          {MENU_ITEMS.map((menu, idx) => (
-            <div key={idx} className="space-y-1 border-b border-white/10 pb-3">
-              <a 
-                href={menu.link}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block font-bold text-[#D0B579] text-base"
-              >
-                {menu.title}
-              </a>
-              {menu.submenus.map((sub, sIdx) => (
-                <a
-                  key={sIdx}
-                  href={sub.link}
+          {MENU_ITEMS.map((menu, idx) => {
+            const isExternal = menu.link.startsWith('http');
+            return (
+              <div key={idx} className="space-y-1 border-b border-white/10 pb-3">
+                <a 
+                  href={menu.link}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block pl-4 py-1 text-xs text-white/80 hover:text-white"
+                  className="block font-bold text-[#D0B579] text-base"
                 >
-                  └ {sub.title}
+                  {menu.title}
                 </a>
-              ))}
-            </div>
-          ))}
+                {menu.submenus.map((sub, sIdx) => {
+                  const isSubExternal = sub.link.startsWith('http');
+                  return (
+                    <a
+                      key={sIdx}
+                      href={sub.link}
+                      target={isSubExternal ? "_blank" : undefined}
+                      rel={isSubExternal ? "noopener noreferrer" : undefined}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block pl-4 py-1 text-xs text-white/80 hover:text-white"
+                    >
+                      └ {sub.title}
+                    </a>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
       )}
     </header>
