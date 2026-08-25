@@ -22,7 +22,8 @@
 
 ### 3) React 렌더링 최적화
 - `App.jsx` 내 핸들러 함수들(`navigateTo`, `handleAddToCart`, `handleRemoveFromCart`, `handleClearCart`, `handleLogout`)에 `useCallback` 적용
-- 장바구니 수량 연산(`totalCartCount`)에 `useMemo` 적용하여 불필요한 인라인 재연산 차단
+- 장바구니 수량 연산(`totalCartCount`) 및 상품 목록 카테고리 필터링(`filteredProducts`)에 `useMemo` 적용
+- `ProductCatalog.jsx` 내 `ProductCard` 컴포넌트 추출 및 `React.memo` 적용 + 이미지 `loading="lazy"` 속성 추가로 불필요한 전체 카드 리렌더링 완벽 차단
 
 ---
 

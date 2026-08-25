@@ -1,6 +1,95 @@
-import React, { useState } from 'react';
-import { Star, ShoppingBag, Eye, Filter, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useMemo, memo } from 'react';
+import { Star, ShoppingBag, Eye, Filter, ChevronDown, ChevronUp } from 'lucide-react';
 import { PRODUCTS_DATA, FAQS_DATA, BRAND_INFO } from '../data/dummyData';
+
+const ProductCard = memo(({ product, onSelectProduct, onAddToCart }) => {
+  return (
+    <div className="warm-card group flex flex-col justify-between overflow-hidden relative">
+      {/* Badges */}
+      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+        {product.isBest && (
+          <span className="bg-[#D0B579] text-[#2C2825] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
+            BEST
+          </span>
+        )}
+        {product.isNew && (
+          <span className="bg-[#0B318F] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
+            NEW
+          </span>
+        )}
+      </div>
+
+      {/* Product Image */}
+      <div 
+        className="relative h-72 overflow-hidden bg-[#FAF6F0] cursor-pointer" 
+        onClick={() => onSelectProduct(product)}
+      >
+        <img
+          src={product.image}
+          alt={product.name}
+          loading="lazy"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+          <button
+            onClick={(e) => { e.stopPropagation(); onSelectProduct(product); }}
+            className="p-3 bg-white hover:bg-[#F7F2E9] text-[#2C2825] rounded-full shadow-lg transition-transform hover:scale-110"
+            title="상세보기"
+          >
+            <Eye size={18} />
+          </button>
+          <button
+            onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
+            className="p-3 bg-[#0B318F] hover:bg-[#082672] text-white rounded-full shadow-lg transition-transform hover:scale-110"
+            title="장바구니 담기"
+          >
+            <ShoppingBag size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Body Details */}
+      <div className="p-6 flex-1 flex flex-col justify-between text-left">
+        <div>
+          <div className="flex items-center justify-between text-xs text-[#0B318F] font-bold mb-1.5">
+            <span>{product.dyeType}</span>
+            <span className="flex items-center gap-1 text-[#D0B579]">
+              <Star size={12} fill="#D0B579" /> {product.rating} ({product.reviewsCount})
+            </span>
+          </div>
+          <h3 
+            onClick={() => onSelectProduct(product)}
+            className="text-base font-bold text-[#2C2825] mb-2 hover:text-[#0B318F] cursor-pointer transition-colors line-clamp-1"
+          >
+            {product.name}
+          </h3>
+          <p className="text-xs text-[#6E6862] line-clamp-2 font-light mb-4">
+            {product.description}
+          </p>
+        </div>
+
+        {/* Price */}
+        <div className="pt-4 border-t border-[#E8DFD5] flex items-center justify-between">
+          <div>
+            <span className="text-xs text-[#A0AAB2] line-through block -mb-1">
+              {product.originalPrice.toLocaleString()}원
+            </span>
+            <span className="text-xl font-bold text-[#2C2825] font-serif">
+              {product.price.toLocaleString()}원
+            </span>
+          </div>
+
+          <button
+            onClick={() => onAddToCart(product)}
+            className="px-4 py-2 rounded-lg bg-[#FAF6F0] hover:bg-[#0B318F] text-[#0B318F] hover:text-white text-xs font-bold border border-[#E8DFD5] transition-colors flex items-center gap-1.5"
+          >
+            <ShoppingBag size={14} /> 담기
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+});
 
 export default function ProductCatalog({ onSelectProduct, onAddToCart }) {
   const [selectedCategory, setSelectedCategory] = useState("전체");
@@ -8,9 +97,11 @@ export default function ProductCatalog({ onSelectProduct, onAddToCart }) {
 
   const categories = ["전체", "롱텐실", "사각텐실", "선물세트"];
 
-  const filteredProducts = selectedCategory === "전체"
-    ? PRODUCTS_DATA
-    : PRODUCTS_DATA.filter(p => p.category === selectedCategory);
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === "전체"
+      ? PRODUCTS_DATA
+      : PRODUCTS_DATA.filter(p => p.category === selectedCategory);
+  }, [selectedCategory]);
 
   return (
     <div id="shop">
@@ -53,92 +144,12 @@ export default function ProductCatalog({ onSelectProduct, onAddToCart }) {
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((product) => (
-              <div
+              <ProductCard
                 key={product.id}
-                className="warm-card group flex flex-col justify-between overflow-hidden relative"
-              >
-                {/* Badges */}
-                <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
-                  {product.isBest && (
-                    <span className="bg-[#D0B579] text-[#2C2825] text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
-                      BEST
-                    </span>
-                  )}
-                  {product.isNew && (
-                    <span className="bg-[#0B318F] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-sm">
-                      NEW
-                    </span>
-                  )}
-                </div>
-
-                {/* Product Image */}
-                <div 
-                  className="relative h-72 overflow-hidden bg-[#FAF6F0] cursor-pointer" 
-                  onClick={() => onSelectProduct(product)}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onSelectProduct(product); }}
-                      className="p-3 bg-white hover:bg-[#F7F2E9] text-[#2C2825] rounded-full shadow-lg transition-transform hover:scale-110"
-                      title="상세보기"
-                    >
-                      <Eye size={18} />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
-                      className="p-3 bg-[#0B318F] hover:bg-[#082672] text-white rounded-full shadow-lg transition-transform hover:scale-110"
-                      title="장바구니 담기"
-                    >
-                      <ShoppingBag size={18} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Body Details */}
-                <div className="p-6 flex-1 flex flex-col justify-between text-left">
-                  <div>
-                    <div className="flex items-center justify-between text-xs text-[#0B318F] font-bold mb-1.5">
-                      <span>{product.dyeType}</span>
-                      <span className="flex items-center gap-1 text-[#D0B579]">
-                        <Star size={12} fill="#D0B579" /> {product.rating} ({product.reviewsCount})
-                      </span>
-                    </div>
-                    <h3 
-                      onClick={() => onSelectProduct(product)}
-                      className="text-base font-bold text-[#2C2825] mb-2 hover:text-[#0B318F] cursor-pointer transition-colors line-clamp-1"
-                    >
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-[#6E6862] line-clamp-2 font-light mb-4">
-                      {product.description}
-                    </p>
-                  </div>
-
-                  {/* Price */}
-                  <div className="pt-4 border-t border-[#E8DFD5] flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-[#A0AAB2] line-through block -mb-1">
-                        {product.originalPrice.toLocaleString()}원
-                      </span>
-                      <span className="text-xl font-bold text-[#2C2825] font-serif">
-                        {product.price.toLocaleString()}원
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => onAddToCart(product)}
-                      className="px-4 py-2 rounded-lg bg-[#FAF6F0] hover:bg-[#0B318F] text-[#0B318F] hover:text-white text-xs font-bold border border-[#E8DFD5] transition-colors flex items-center gap-1.5"
-                    >
-                      <ShoppingBag size={14} /> 담기
-                    </button>
-                  </div>
-                </div>
-              </div>
+                product={product}
+                onSelectProduct={onSelectProduct}
+                onAddToCart={onAddToCart}
+              />
             ))}
           </div>
         </div>
