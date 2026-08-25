@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { 
-  Users, DollarSign, Award, Gift, Search, Filter, RefreshCw, Eye, PlusCircle, ArrowUpDown 
+  Users, DollarSign, Award, Gift, Search, Filter, RefreshCw, Eye, PlusCircle, ArrowUpDown,
+  Mail, MessageSquare, Smartphone, Send, CheckSquare, Square, Check, X
 } from 'lucide-react';
 import { CUSTOMERS_DATA } from '../data/dummyData';
 import { PointGrantModal, CustomerDetailModal } from './PointGrantModal';
+import { BatchMessageModal } from './BatchMessageModal';
 
 export default function CustomerTab() {
   const [customers, setCustomers] = useState(CUSTOMERS_DATA);
@@ -17,9 +19,14 @@ export default function CustomerTab() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('totalAmount'); // 'totalAmount' | 'purchaseCount' | 'registeredAt'
 
-  // Modals state
+  // Multi-Selection State
+  const [selectedIds, setSelectedIds] = useState([]);
+
+  // Modals & Batch Messaging State
   const [selectedPointCustomer, setSelectedPointCustomer] = useState(null);
   const [selectedDetailCustomer, setSelectedDetailCustomer] = useState(null);
+  const [batchMsgState, setBatchMsgState] = useState({ isOpen: false, channel: 'kakao' });
+  const [toastMsg, setToastMsg] = useState('');
 
   // Point Grant handler
   const handleGrantPoints = (customerId, amount) => {
@@ -36,6 +43,7 @@ export default function CustomerTab() {
     setFreqFilter('전체');
     setAmountFilter('전체');
     setSearchQuery('');
+    setSelectedIds([]);
   };
 
   // Filter Engine
@@ -80,6 +88,42 @@ export default function CustomerTab() {
     });
   }, [customers, genderFilter, ageFilter, tierFilter, freqFilter, amountFilter, searchQuery, sortBy]);
 
+  // Checkbox Selection Logic
+  const isAllFilteredSelected = filteredCustomers.length > 0 && filteredCustomers.every(c => selectedIds.includes(c.id));
+
+  const toggleSelectAll = () => {
+    if (isAllFilteredSelected) {
+      setSelectedIds(prev => prev.filter(id => !filteredCustomers.some(c => c.id === id)));
+    } else {
+      const filteredIdList = filteredCustomers.map(c => c.id);
+      setSelectedIds(prev => Array.from(new Set([...prev, ...filteredIdList])));
+    }
+  };
+
+  const toggleSelectCustomer = (id) => {
+    setSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  // Get selected customers objects
+  const selectedCustomerObjects = useMemo(() => {
+    return customers.filter(c => selectedIds.includes(c.id));
+  }, [customers, selectedIds]);
+
+  // Open Batch Message Modal for channel
+  const handleOpenBatchMsg = (channel) => {
+    if (selectedIds.length === 0) return;
+    setBatchMsgState({ isOpen: true, channel });
+  };
+
+  const handleMessageSuccess = ({ channel, count, title }) => {
+    const channelNameMap = { kakao: '카카오 알림톡', sms: 'SMS 문자', email: '이메일' };
+    setToastMsg(`🎉 ${count}명의 선택 고객에게 [${channelNameMap[channel]}] 발송 요청이 정상 완료되었습니다!`);
+    setSelectedIds([]);
+    setTimeout(() => setToastMsg(''), 4000);
+  };
+
   // Key Overview Aggregations
   const totalCustomerCount = customers.length;
   const totalCumulativeSales = customers.reduce((sum, c) => sum + c.totalAmount, 0);
@@ -87,6 +131,19 @@ export default function CustomerTab() {
 
   return (
     <div className="space-y-8 animate-fade-in text-left">
+      {/* Toast Banner */}
+      {toastMsg && (
+        <div className="p-4 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-xl flex items-center justify-between animate-fade-in">
+          <div className="flex items-center gap-2">
+            <Check size={18} />
+            <span>{toastMsg}</span>
+          </div>
+          <button onClick={() => setToastMsg('')} className="p-1 hover:bg-emerald-700 rounded-lg">
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
       {/* Overview Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="warm-card p-6 bg-white flex items-center justify-between">
@@ -255,10 +312,73 @@ export default function CustomerTab() {
         </div>
       </div>
 
+      {/* BATCH ACTION CONTROLS BAR FOR SELECTED CUSTOMERS */}
+      {selectedIds.length > 0 && (
+        <div className="warm-card p-4 bg-[#0B318F] text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl border border-[#1542B3] animate-fade-in">
+          <div className="flex items-center gap-3">
+            <span className="w-8 h-8 rounded-full bg-[#D0B579] text-[#2C2825] font-bold text-xs flex items-center justify-center font-serif">
+              {selectedIds.length}
+            </span>
+            <div>
+              <span className="font-bold text-sm text-white block">
+                {selectedIds.length}명의 고객이 선택되었습니다
+              </span>
+              <span className="text-[11px] text-white/70 font-light">
+                카카오톡, 문자(SMS), 이메일을 일괄 전송하거나 포인트를 지급할 수 있습니다.
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* KakaoTalk Button */}
+            <button
+              onClick={() => handleOpenBatchMsg('kakao')}
+              className="px-3.5 py-2 rounded-xl bg-[#FEE500] hover:bg-[#E6CE00] text-[#191919] text-xs font-bold shadow-md transition-transform hover:scale-105 flex items-center gap-1.5"
+            >
+              <MessageSquare size={14} className="text-[#3C1E1E]" />
+              <span>카카오 알림톡 발송</span>
+            </button>
+
+            {/* SMS Button */}
+            <button
+              onClick={() => handleOpenBatchMsg('sms')}
+              className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-md transition-transform hover:scale-105 flex items-center gap-1.5"
+            >
+              <Smartphone size={14} />
+              <span>문자(SMS) 발송</span>
+            </button>
+
+            {/* Email Button */}
+            <button
+              onClick={() => handleOpenBatchMsg('email')}
+              className="px-3.5 py-2 rounded-xl bg-[#D0B579] hover:bg-[#B89C60] text-[#2C2825] text-xs font-bold shadow-md transition-transform hover:scale-105 flex items-center gap-1.5"
+            >
+              <Mail size={14} />
+              <span>이메일 발송</span>
+            </button>
+
+            {/* Clear Selection */}
+            <button
+              onClick={() => setSelectedIds([])}
+              className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-medium transition-colors"
+            >
+              선택 해제
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Customer List Table */}
       <div className="warm-card p-6 bg-white">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-bold text-[#2C2825]">고객 명단 리스트</h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-base font-bold text-[#2C2825]">고객 명단 리스트</h3>
+            {selectedIds.length > 0 && (
+              <span className="text-xs text-[#0B318F] font-bold bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                {selectedIds.length}명 선택 중
+              </span>
+            )}
+          </div>
           <span className="text-xs text-[#6E6862]">
             총 {filteredCustomers.length}개의 데이터 표시 중
           </span>
@@ -268,6 +388,15 @@ export default function CustomerTab() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FAF6F0] text-[#8C533E] border-y border-[#E8DFD5]">
               <tr>
+                <th className="py-3 px-3 text-center w-10">
+                  <input
+                    type="checkbox"
+                    checked={isAllFilteredSelected}
+                    onChange={toggleSelectAll}
+                    className="w-4 h-4 text-[#0B318F] rounded border-gray-300 focus:ring-[#0B318F] cursor-pointer"
+                    title="전체 선택 / 해제"
+                  />
+                </th>
                 <th className="py-3 px-4 font-bold">고객 ID</th>
                 <th className="py-3 px-4 font-bold">고객명</th>
                 <th className="py-3 px-4 font-bold">성별/연령</th>
@@ -275,69 +404,105 @@ export default function CustomerTab() {
                 <th className="py-3 px-4 font-bold">구매횟수</th>
                 <th className="py-3 px-4 font-bold">누적구매액</th>
                 <th className="py-3 px-4 font-bold">보유 포인트</th>
-                <th className="py-3 px-4 font-bold">선호 염염</th>
-                <th className="py-3 px-4 font-bold text-center">관리 액션</th>
+                <th className="py-3 px-4 font-bold">선호 염색</th>
+                <th className="py-3 px-4 font-bold text-center">개별 액션</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E8DFD5]/60">
               {filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-[#6E6862]">
+                  <td colSpan={10} className="text-center py-12 text-[#6E6862]">
                     조건에 부합하는 고객 데이터가 없습니다.
                   </td>
                 </tr>
               ) : (
-                filteredCustomers.map((cust) => (
-                  <tr key={cust.id} className="hover:bg-[#FAF6F0]/50 transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-medium text-[#2A3B50]">{cust.id}</td>
-                    <td className="py-3.5 px-4 font-bold text-[#2C2825]">
-                      <button 
-                        onClick={() => setSelectedDetailCustomer(cust)}
-                        className="hover:text-[#C47B59] hover:underline transition-colors"
-                      >
-                        {cust.name}
-                      </button>
-                    </td>
-                    <td className="py-3.5 px-4 text-[#6E6862]">{cust.gender} / {cust.ageGroup}</td>
-                    <td className="py-3.5 px-4">
-                      <span className={`badge-tier badge-${cust.tier.toLowerCase()}`}>{cust.tier}</span>
-                    </td>
-                    <td className="py-3.5 px-4 font-serif font-bold text-[#2C2825]">{cust.purchaseCount}회</td>
-                    <td className="py-3.5 px-4 font-serif font-bold text-[#8C533E]">
-                      {cust.totalAmount.toLocaleString()}원
-                    </td>
-                    <td className="py-3.5 px-4 font-serif font-bold text-[#C47B59]">
-                      {cust.points.toLocaleString()} P
-                    </td>
-                    <td className="py-3.5 px-4 text-[#2A3B50] font-medium">{cust.preferredDye}</td>
-                    <td className="py-3.5 px-4 text-center">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => setSelectedPointCustomer(cust)}
-                          className="px-2.5 py-1 rounded-md bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-[11px] font-semibold transition-colors flex items-center gap-1"
-                          title="포인트 지급"
-                        >
-                          <Gift size={12} /> 포인트
-                        </button>
-
-                        <button
+                filteredCustomers.map((cust) => {
+                  const isSelected = selectedIds.includes(cust.id);
+                  return (
+                    <tr
+                      key={cust.id}
+                      className={`transition-colors ${
+                        isSelected ? 'bg-[#FFFBE6] border-l-4 border-l-[#D0B579]' : 'hover:bg-[#FAF6F0]/50'
+                      }`}
+                    >
+                      <td className="py-3.5 px-3 text-center">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelectCustomer(cust.id)}
+                          className="w-4 h-4 text-[#0B318F] rounded border-gray-300 focus:ring-[#0B318F] cursor-pointer"
+                        />
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-medium text-[#2A3B50]">{cust.id}</td>
+                      <td className="py-3.5 px-4 font-bold text-[#2C2825]">
+                        <button 
                           onClick={() => setSelectedDetailCustomer(cust)}
-                          className="p-1 rounded-md bg-[#FAF6F0] hover:bg-[#2C2825] text-[#6E6862] hover:text-white border border-[#E8DFD5] transition-colors"
-                          title="상세 프로필"
+                          className="hover:text-[#C47B59] hover:underline transition-colors"
                         >
-                          <Eye size={14} />
+                          {cust.name}
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="py-3.5 px-4 text-[#6E6862]">{cust.gender} / {cust.ageGroup}</td>
+                      <td className="py-3.5 px-4">
+                        <span className={`badge-tier badge-${cust.tier.toLowerCase()}`}>{cust.tier}</span>
+                      </td>
+                      <td className="py-3.5 px-4 font-serif font-bold text-[#2C2825]">{cust.purchaseCount}회</td>
+                      <td className="py-3.5 px-4 font-serif font-bold text-[#8C533E]">
+                        {cust.totalAmount.toLocaleString()}원
+                      </td>
+                      <td className="py-3.5 px-4 font-serif font-bold text-[#C47B59]">
+                        {cust.points.toLocaleString()} P
+                      </td>
+                      <td className="py-3.5 px-4 text-[#2A3B50] font-medium">{cust.preferredDye}</td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <button
+                            onClick={() => {
+                              setSelectedIds([cust.id]);
+                              setBatchMsgState({ isOpen: true, channel: 'kakao' });
+                            }}
+                            className="px-2 py-1 rounded bg-[#FEE500] hover:opacity-80 text-[#191919] text-[10px] font-bold transition-opacity"
+                            title="카카오톡 단일 발송"
+                          >
+                            알림톡
+                          </button>
+
+                          <button
+                            onClick={() => setSelectedPointCustomer(cust)}
+                            className="px-2 py-1 rounded bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-[10px] font-semibold transition-colors flex items-center gap-0.5"
+                            title="포인트 지급"
+                          >
+                            <Gift size={11} /> 포인트
+                          </button>
+
+                          <button
+                            onClick={() => setSelectedDetailCustomer(cust)}
+                            className="p-1 rounded bg-[#FAF6F0] hover:bg-[#2C2825] text-[#6E6862] hover:text-white border border-[#E8DFD5] transition-colors"
+                            title="상세 프로필"
+                          >
+                            <Eye size={12} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Modals */}
+      {/* Batch Message Modal */}
+      <BatchMessageModal
+        isOpen={batchMsgState.isOpen}
+        channel={batchMsgState.channel}
+        selectedCustomers={selectedCustomerObjects}
+        onClose={() => setBatchMsgState({ isOpen: false, channel: 'kakao' })}
+        onSendSuccess={handleMessageSuccess}
+      />
+
+      {/* Detail & Point Modals */}
       <PointGrantModal
         customer={selectedPointCustomer}
         onClose={() => setSelectedPointCustomer(null)}
@@ -351,3 +516,4 @@ export default function CustomerTab() {
     </div>
   );
 }
+
