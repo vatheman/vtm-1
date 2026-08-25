@@ -185,8 +185,8 @@ export default function CustomerTab() {
       </div>
 
       {/* 5 Filter Conditions Control Panel */}
-      <div className="warm-card p-6 bg-white space-y-4">
-        <div className="flex items-center justify-between border-b border-[#E8DFD5] pb-4">
+      <div className="warm-card p-6 bg-white space-y-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[#E8DFD5] pb-4 gap-3">
           <div className="flex items-center gap-2">
             <Filter size={18} className="text-[#8C533E]" />
             <h3 className="text-base font-bold text-[#2C2825]">고객 상세 필터링 조건</h3>
@@ -284,8 +284,69 @@ export default function CustomerTab() {
           </div>
         </div>
 
+        {/* PERMANENTLY VISIBLE GROUP MESSAGING TOOLBAR FOR FILTERED CUSTOMERS */}
+        <div className="p-4 rounded-2xl bg-[#0B318F] text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg border border-[#1542B3]">
+          <div className="flex items-center gap-3">
+            <span className="w-9 h-9 rounded-full bg-[#D0B579] text-[#2C2825] font-bold text-sm flex items-center justify-center font-serif shadow-sm">
+              {selectedIds.length > 0 ? selectedIds.length : filteredCustomers.length}
+            </span>
+            <div>
+              <span className="font-bold text-sm text-white flex items-center gap-2">
+                <span>{selectedIds.length > 0 ? `선택된 ${selectedIds.length}명 고객 그룹` : `필터링된 ${filteredCustomers.length}명 고객 전체`}</span>
+                <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-md font-normal">
+                  {selectedIds.length > 0 ? '체크박스 지정' : '조회조건 매칭'}
+                </span>
+              </span>
+              <span className="text-[11px] text-white/80 font-light">
+                아래 3가지 전송 채널 버튼을 눌러 메시지를 즉시 일괄 발송할 수 있습니다.
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* 1. 카톡 알림톡 버튼 */}
+            <button
+              onClick={() => handleOpenBatchMsg('kakao')}
+              disabled={filteredCustomers.length === 0}
+              className="px-4 py-2.5 rounded-xl bg-[#FEE500] hover:bg-[#E6CE00] text-[#191919] text-xs font-bold shadow-md transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+            >
+              <MessageSquare size={16} className="text-[#3C1E1E]" />
+              <span>카카오 알림톡 발송</span>
+            </button>
+
+            {/* 2. 문자메시지(SMS) 버튼 */}
+            <button
+              onClick={() => handleOpenBatchMsg('sms')}
+              disabled={filteredCustomers.length === 0}
+              className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-md transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+            >
+              <Smartphone size={16} />
+              <span>문자메시지(SMS) 발송</span>
+            </button>
+
+            {/* 3. 이메일 버튼 */}
+            <button
+              onClick={() => handleOpenBatchMsg('email')}
+              disabled={filteredCustomers.length === 0}
+              className="px-4 py-2.5 rounded-xl bg-[#D0B579] hover:bg-[#B89C60] text-[#2C2825] text-xs font-bold shadow-md transition-all hover:scale-105 flex items-center gap-1.5 cursor-pointer"
+            >
+              <Mail size={16} />
+              <span>이메일(Email) 발송</span>
+            </button>
+
+            {selectedIds.length > 0 && (
+              <button
+                onClick={() => setSelectedIds([])}
+                className="px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs font-medium transition-colors ml-1"
+              >
+                선택 해제
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Search Bar & Sorting */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row gap-3 pt-1">
           <div className="relative flex-1">
             <Search size={16} className="absolute left-3 top-3 text-[#A0AAB2]" />
             <input
@@ -455,26 +516,53 @@ export default function CustomerTab() {
                       </td>
                       <td className="py-3.5 px-4 text-[#2A3B50] font-medium">{cust.preferredDye}</td>
                       <td className="py-3.5 px-4 text-center">
-                        <div className="flex items-center justify-center gap-1.5">
+                        <div className="flex items-center justify-center gap-1">
+                          {/* Kakao Button */}
                           <button
                             onClick={() => {
                               setSelectedIds([cust.id]);
                               setBatchMsgState({ isOpen: true, channel: 'kakao' });
                             }}
-                            className="px-2 py-1 rounded bg-[#FEE500] hover:opacity-80 text-[#191919] text-[10px] font-bold transition-opacity"
-                            title="카카오톡 단일 발송"
+                            className="px-2 py-1 rounded bg-[#FEE500] hover:bg-[#E6CE00] text-[#191919] text-[10px] font-bold transition-transform hover:scale-105 flex items-center gap-0.5 shadow-2xs"
+                            title="카카오톡 알림톡 발송"
                           >
-                            알림톡
+                            <MessageSquare size={10} /> 카톡
                           </button>
 
+                          {/* SMS Button */}
+                          <button
+                            onClick={() => {
+                              setSelectedIds([cust.id]);
+                              setBatchMsgState({ isOpen: true, channel: 'sms' });
+                            }}
+                            className="px-2 py-1 rounded bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold transition-transform hover:scale-105 flex items-center gap-0.5 shadow-2xs"
+                            title="문자메시지(SMS) 발송"
+                          >
+                            <Smartphone size={10} /> 문자
+                          </button>
+
+                          {/* Email Button */}
+                          <button
+                            onClick={() => {
+                              setSelectedIds([cust.id]);
+                              setBatchMsgState({ isOpen: true, channel: 'email' });
+                            }}
+                            className="px-2 py-1 rounded bg-[#D0B579] hover:bg-[#B89C60] text-[#2C2825] text-[10px] font-bold transition-transform hover:scale-105 flex items-center gap-0.5 shadow-2xs"
+                            title="이메일(Email) 발송"
+                          >
+                            <Mail size={10} /> 이메일
+                          </button>
+
+                          {/* Point Button */}
                           <button
                             onClick={() => setSelectedPointCustomer(cust)}
                             className="px-2 py-1 rounded bg-[#FEF3EB] hover:bg-[#8C533E] text-[#8C533E] hover:text-white border border-[#FAD1B8] text-[10px] font-semibold transition-colors flex items-center gap-0.5"
                             title="포인트 지급"
                           >
-                            <Gift size={11} /> 포인트
+                            <Gift size={10} /> 포인트
                           </button>
 
+                          {/* Detail View Button */}
                           <button
                             onClick={() => setSelectedDetailCustomer(cust)}
                             className="p-1 rounded bg-[#FAF6F0] hover:bg-[#2C2825] text-[#6E6862] hover:text-white border border-[#E8DFD5] transition-colors"
