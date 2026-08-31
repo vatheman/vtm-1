@@ -23,7 +23,7 @@ export const INSTAGRAM_POSTS = [
     image: "/assets/images/product1.png",
     likes: 124,
     comments: 18,
-    tag: "#바더만 #풋감염색 #텐실스카프"
+    tag: "#바더만 #풋감염색 #텐셀스카프"
   },
   {
     id: 2,
@@ -37,7 +37,7 @@ export const INSTAGRAM_POSTS = [
     image: "/assets/images/product2.png",
     likes: 98,
     comments: 12,
-    tag: "#사각텐실 #자연소재 #선물추천"
+    tag: "#사각텐셀 #자연소재 #선물추천"
   },
   {
     id: 4,
@@ -63,8 +63,8 @@ export const MENU_ITEMS = [
     link: "https://vatheman.com/shop_all",
     submenus: [
       { title: "ALL (전체상품)", link: "https://vatheman.com/shop_all" },
-      { title: "롱텐실 스카프", link: "https://vatheman.com/shop_all" },
-      { title: "사각텐실 스카프", link: "https://vatheman.com/shop_all" }
+      { title: "롱텐셀 스카프", link: "https://vatheman.com/shop_all" },
+      { title: "사각텐셀 스카프", link: "https://vatheman.com/shop_all" }
     ]
   },
   {
@@ -82,8 +82,8 @@ export const MENU_ITEMS = [
 export const PRODUCTS_DATA = [
   {
     id: 1,
-    name: "바더만 풋감 손염색 롱텐실 스카프",
-    category: "롱텐실",
+    name: "바더만 풋감 손염색 롱텐셀 스카프",
+    category: "롱텐셀",
     categoryCode: "shop_01",
     dyeType: "감염 (Persimmon)",
     price: 89000,
@@ -93,13 +93,13 @@ export const PRODUCTS_DATA = [
     isBest: true,
     isNew: false,
     image: "/assets/images/product1.png",
-    description: "제주 풋감 수액을 추출하여 수작업으로 염색한 100% 텐실 오가닉 롱스카프. 부드러운 드레이프성과 깊은 흙빛 그러데이션이 일상에품격을 더합니다.",
-    details: ["소재: 텐실(Tencel) 100%", "염재: 국내산 풋감 수액 (자연 햇살 발색)", "사이즈: 180cm x 65cm", "세탁: 미온수 중성세제 단독 손세탁 추천"]
+    description: "제주 풋감 수액을 추출하여 수작업으로 염색한 100% 텐셀 오가닉 롱스카프. 부드러운 드레이프성과 깊은 흙빛 그러데이션이 일상에품격을 더합니다.",
+    details: ["소재: 텐셀(Tencel) 100%", "염재: 국내산 풋감 수액 (자연 햇살 발색)", "사이즈: 180cm x 65cm", "세탁: 미온수 중성세제 단독 손세탁 추천"]
   },
   {
     id: 2,
-    name: "바더만 천연 쪽염색 롱텐실 스카프",
-    category: "롱텐실",
+    name: "바더만 천연 쪽염색 롱텐셀 스카프",
+    category: "롱텐셀",
     categoryCode: "shop_01",
     dyeType: "쪽염 (Natural Indigo)",
     price: 89000,
@@ -109,13 +109,13 @@ export const PRODUCTS_DATA = [
     isBest: true,
     isNew: true,
     image: "/assets/images/hero.png",
-    description: "깊은 바다와 밤하늘을 닮은 쪽염색 텐실 스카프. 항균 작용과 통기성이 뛰어나 피부에 닿았을 때 청량하고 쾌적함을 선사합니다.",
-    details: ["소재: 텐실(Tencel) 100%", "염재: 천연 쪽 발효염", "사이즈: 180cm x 65cm", "특징: 항균, 소취 기능 유지"]
+    description: "깊은 바다와 밤하늘을 닮은 쪽염색 텐셀 스카프. 항균 작용과 통기성이 뛰어나 피부에 닿았을 때 청량하고 쾌적함을 선사합니다.",
+    details: ["소재: 텐셀(Tencel) 100%", "염재: 천연 쪽 발효염", "사이즈: 180cm x 65cm", "특징: 항균, 소취 기능 유지"]
   },
   {
     id: 3,
-    name: "바더만 풋감 자연빛깔 사각텐실 스카프",
-    category: "사각텐실",
+    name: "바더만 풋감 자연빛깔 사각텐셀 스카프",
+    category: "사각텐셀",
     categoryCode: "shop_02",
     dyeType: "감염 (Persimmon)",
     price: 68000,
@@ -125,13 +125,13 @@ export const PRODUCTS_DATA = [
     isBest: false,
     isNew: false,
     image: "/assets/images/product2.png",
-    description: "단아하고 정사각형 핏으로 목에 두르기 편한 사각 텐실 스카프. 자연이 준 은은한 풋감의 브라운 톤이 어떠한 착장에도 잘 어우러집니다.",
-    details: ["소재: 텐실(Tencel) 100%", "염재: 풋감 추출액", "사이즈: 90cm x 90cm"]
+    description: "단아하고 정사각형 핏으로 목에 두르기 편한 사각 텐셀 스카프. 자연이 준 은은한 풋감의 브라운 톤이 어떠한 착장에도 잘 어우러집니다.",
+    details: ["소재: 텐셀(Tencel) 100%", "염재: 풋감 추출액", "사이즈: 90cm x 90cm"]
   },
   {
     id: 4,
-    name: "바더만 강화 쑥염 롱텐실 스카프",
-    category: "롱텐실",
+    name: "바더만 강화 쑥염 롱텐셀 스카프",
+    category: "롱텐셀",
     categoryCode: "shop_01",
     dyeType: "쑥염 (Mugwort)",
     price: 89000,
@@ -142,12 +142,12 @@ export const PRODUCTS_DATA = [
     isNew: true,
     image: "/assets/images/craft.png",
     description: "강화도 은쑥의 따스한 성질과 오가닉 그린 빛깔을 머금은 롱스카프. 사계절 부담 없이 어깨에 가볍게 걸치기 좋습니다.",
-    details: ["소재: 텐실 100%", "염재: 강화도 쑥 엑기스", "사이즈: 180cm x 65cm"]
+    details: ["소재: 텐셀 100%", "염재: 강화도 쑥 엑기스", "사이즈: 180cm x 65cm"]
   },
   {
     id: 5,
-    name: "바더만 보성 황토염 사각텐실 스카프",
-    category: "사각텐실",
+    name: "바더만 보성 황토염 사각텐셀 스카프",
+    category: "사각텐셀",
     categoryCode: "shop_02",
     dyeType: "황토염 (Red Clay)",
     price: 68000,
@@ -158,12 +158,12 @@ export const PRODUCTS_DATA = [
     isNew: false,
     image: "/assets/images/product2.png",
     description: "황토의 원적외선 기운과 자연 흙빛의 아늑함이 조화를 이루는 프리미엄 사각스카프. 부모님과 소중한 분을 위한 바른 가치의 선물입니다.",
-    details: ["소재: 텐실 100%", "염재: 보성 청정 황토", "사이즈: 90cm x 90cm"]
+    details: ["소재: 텐셀 100%", "염재: 보성 청정 황토", "사이즈: 90cm x 90cm"]
   },
   {
     id: 6,
-    name: "바더만 천연 락염 핑크 롱텐실 스카프",
-    category: "롱텐실",
+    name: "바더만 천연 락염 핑크 롱텐셀 스카프",
+    category: "롱텐셀",
     categoryCode: "shop_01",
     dyeType: "락염 (Lac Red)",
     price: 95000,
@@ -174,7 +174,7 @@ export const PRODUCTS_DATA = [
     isNew: true,
     image: "/assets/images/product1.png",
     description: "자연의 붉은 보석 락(Lac) 염료로 물들인 화사한 로즈 파스텔 롱스카프. 우아한 연분홍 빛깔로 포인트를 주기 좋습니다.",
-    details: ["소재: 텐실 100%", "염재: 천연 락 수지 염료", "사이즈: 180cm x 65cm"]
+    details: ["소재: 텐셀 100%", "염재: 천연 락 수지 염료", "사이즈: 180cm x 65cm"]
   }
 ];
 
@@ -237,8 +237,8 @@ export const SALES_TREND_DATA = [
 ];
 
 export const CATEGORY_STATISTICS = [
-  { name: "롱텐실 스카프", value: 48, amount: "1,867만원", color: "#0B318F" },
-  { name: "사각텐실 스카프", value: 32, amount: "1,245만원", color: "#C47B59" },
+  { name: "롱텐셀 스카프", value: 48, amount: "1,867만원", color: "#0B318F" },
+  { name: "사각텐셀 스카프", value: 32, amount: "1,245만원", color: "#C47B59" },
   { name: "선물세트 & 소품", value: 20, amount: "778만원", color: "#D0B579" }
 ];
 

@@ -67,11 +67,11 @@
     };
 
     const PRODUCTS_DATA = [
-      { id: 1, name: "바더만 풋감 손염색 롱텐실 스카프", category: "롱텐실", dyeType: "감염 (Persimmon)", price: 89000, rating: 4.9, image: "/assets/images/product1.png", description: "100% 텐실 수작업 감나무 손염색 스카프" },
-      { id: 2, name: "바더만 천연 쪽염색 롱텐실 스카프", category: "롱텐실", dyeType: "쪽염 (Indigo)", price: 89000, rating: 5.0, image: "/assets/images/hero.png", description: "깊은 쪽 빛깔의 100% 텐실 오가닉 롱스카프" },
-      { id: 3, name: "바더만 풋감 자연빛깔 사각텐실 스카프", category: "사각텐실", dyeType: "감염 (Persimmon)", price: 68000, rating: 4.8, image: "/assets/images/product2.png", description: "정사각형 핏의 풋감 천연염색 사각스카프" },
-      { id: 4, name: "바더만 강화 쑥염 롱텐실 스카프", category: "롱텐실", dyeType: "쑥염 (Mugwort)", price: 89000, rating: 4.9, image: "/assets/images/craft.png", description: "강화도 쑥의 오가닉 은쑥색 롱스카프" },
-      { id: 5, name: "바더만 보성 황토염 사각텐실 스카프", category: "사각텐실", dyeType: "황토염 (Red Clay)", price: 68000, rating: 4.7, image: "/assets/images/product2.png", description: "보성 청정 황토로 물들인 고급 사각스카프" }
+      { id: 1, name: "바더만 풋감 손염색 롱텐셀 스카프", category: "롱텐셀", dyeType: "감염 (Persimmon)", price: 89000, rating: 4.9, image: "/assets/images/product1.png", description: "100% 텐셀 수작업 감나무 손염색 스카프" },
+      { id: 2, name: "바더만 천연 쪽염색 롱텐셀 스카프", category: "롱텐셀", dyeType: "쪽염 (Indigo)", price: 89000, rating: 5.0, image: "/assets/images/hero.png", description: "깊은 쪽 빛깔의 100% 텐셀 오가닉 롱스카프" },
+      { id: 3, name: "바더만 풋감 자연빛깔 사각텐셀 스카프", category: "사각텐셀", dyeType: "감염 (Persimmon)", price: 68000, rating: 4.8, image: "/assets/images/product2.png", description: "정사각형 핏의 풋감 천연염색 사각스카프" },
+      { id: 4, name: "바더만 강화 쑥염 롱텐셀 스카프", category: "롱텐셀", dyeType: "쑥염 (Mugwort)", price: 89000, rating: 4.9, image: "/assets/images/craft.png", description: "강화도 쑥의 오가닉 은쑥색 롱스카프" },
+      { id: 5, name: "바더만 보성 황토염 사각텐셀 스카프", category: "사각텐셀", dyeType: "황토염 (Red Clay)", price: 68000, rating: 4.7, image: "/assets/images/product2.png", description: "보성 청정 황토로 물들인 고급 사각스카프" }
     ];
 
     const CUSTOMERS_DATA = [
@@ -377,8 +377,8 @@
                   <h3 className="text-lg font-bold font-serif">📈 바더만 통계 & 리포트 분석</h3>
                   <div className="p-4 bg-[#FAF6F0] rounded-xl border text-xs leading-relaxed">
                     <p className="font-bold text-[#0B318F]">vatheman.com 실적 분석 요약:</p>
-                    <p>- 스마트스토어 매출 비중: 52% (인기 상품: 바더만 풋감 롱텐실 스카프)</p>
-                    <p>- 자사몰 직통 매출 비중: 48% (인기 상품: 바더만 쪽염 롱텐실 스카프)</p>
+                    <p>- 스마트스토어 매출 비중: 52% (인기 상품: 바더만 풋감 롱텐셀 스카프)</p>
+                    <p>- 자사몰 직통 매출 비중: 48% (인기 상품: 바더만 쪽염 롱텐셀 스카프)</p>
                   </div>
                   <button onClick={() => alert("바더만_통계리포트.csv 다운로드가 시작되었습니다.")} className="px-4 py-2 bg-[#0B318F] text-white rounded-xl text-xs font-bold">
                     📥 통계 리포트 엑셀 내보내기
@@ -449,7 +449,7 @@
                 </h1>
                 <p className="text-[#6E6862] text-base font-light">
                   풋감, 쪽, 쑥과 황토가 전하는 은은하고 기품 있는 자연빛깔.<br/>
-                  100% 텐실 소재와 핸드메이드 정성으로 일상 속에 따스한 가치와 선물을 만듭니다.
+                  100% 텐셀 소재와 핸드메이드 정성으로 일상 속에 따스한 가치와 선물을 만듭니다.
                 </p>
                 <div className="flex gap-4">
                   <a href="#shop" className="px-7 py-3.5 bg-[#0B318F] text-white rounded-xl font-bold text-xs shadow-md">
@@ -476,8 +476,8 @@
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
                 <div className="warm-card p-6 bg-white">
-                  <h3 className="font-bold text-base text-[#0B318F] mb-2">100% 텐실(Tencel) 소재</h3>
-                  <p className="text-xs text-[#6E6862]">피부에 미끄러지듯 부드럽고 실크보다 관리가 용이한 고급 오가닉 텐실 소재입니다.</p>
+                  <h3 className="font-bold text-base text-[#0B318F] mb-2">100% 텐셀(Tencel) 소재</h3>
+                  <p className="text-xs text-[#6E6862]">피부에 미끄러지듯 부드럽고 실크보다 관리가 용이한 고급 오가닉 텐셀 소재입니다.</p>
                 </div>
                 <div className="warm-card p-6 bg-white">
                   <h3 className="font-bold text-base text-[#0B318F] mb-2">풋감·쪽·쑥·황토 염재</h3>
@@ -497,7 +497,7 @@
               <h2 className="text-3xl font-bold font-serif mb-6 text-center text-[#2C2825]">바더만 SHOP 라인업</h2>
               
               <div className="flex gap-2 justify-center mb-10">
-                {['전체', '롱텐실', '사각텐실'].map(tab => (
+                {['전체', '롱텐셀', '사각텐셀'].map(tab => (
                   <button
                     key={tab}
                     onClick={() => setShopTab(tab)}
@@ -877,7 +877,7 @@
                       {showTermsDetail && (
                         <div className="p-2.5 bg-[#FAF6F0] rounded-xl border text-[11px] text-[#6E6862] leading-relaxed max-h-24 overflow-y-auto">
                           {showTermsDetail === 'terms' ? (
-                            <p><strong>[이용약관]</strong> 바더만 자사몰 회원 이용 규정 및 오가닉 텐실 스카프 배송 규정을 준수합니다.</p>
+                            <p><strong>[이용약관]</strong> 바더만 자사몰 회원 이용 규정 및 오가닉 텐셀 스카프 배송 규정을 준수합니다.</p>
                           ) : (
                             <p><strong>[개인정보 수집 동의]</strong> 수집 항목: 이메일, 성명, 연락처. 보유 기간: 회원 탈퇴 시 즉시 파기.</p>
                           )}

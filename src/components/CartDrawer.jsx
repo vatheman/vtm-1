@@ -133,7 +133,7 @@ export function Footer({ onNavigate }) {
             <h4 className="text-sm font-bold text-[#2C2825] mb-4">SITE MENU</h4>
             <ul className="space-y-2 text-xs text-[#6E6862]">
               <li><a href="#about" className="hover:text-[#0B318F] transition-colors font-medium">ABOUT (브랜드소개)</a></li>
-              <li><a href="#shop" className="hover:text-[#0B318F] transition-colors font-medium">SHOP (롱텐실 / 사각텐실)</a></li>
+              <li><a href="#shop" className="hover:text-[#0B318F] transition-colors font-medium">SHOP (롱텐셀 / 사각텐셀)</a></li>
               <li><a href="#faq" className="hover:text-[#0B318F] transition-colors font-medium">FAQ (자주묻는질문)</a></li>
               <li><a href="#notice" className="hover:text-[#0B318F] transition-colors font-medium">NOTICE (공지사항)</a></li>
             </ul>

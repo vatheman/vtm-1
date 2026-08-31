@@ -25,7 +25,7 @@ export default function Hero({ onExploreProducts }) {
 
             <p className="text-base sm:text-lg text-[#6E6862] leading-relaxed max-w-2xl font-light">
               풋감, 쪽, 쑥과 황토가 전하는 은은하고 기품 있는 자연빛깔.<br className="hidden sm:inline" />
-              100% 오가닉 텐실과 핸드메이드 정성으로 일상 속에 따스한 가치와 선물을 만듭니다.
+              100% 오가닉 텐셀과 핸드메이드 정성으로 일상 속에 따스한 가치와 선물을 만듭니다.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -52,7 +52,7 @@ export default function Hero({ onExploreProducts }) {
             <div className="pt-8 border-t border-[#E8DFD5] grid grid-cols-3 gap-4 text-center sm:text-left">
               <div>
                 <div className="text-2xl font-bold text-[#0B318F] font-serif">100%</div>
-                <div className="text-xs text-[#6E6862]">천연 텐실 & 오가닉 염재</div>
+                <div className="text-xs text-[#6E6862]">천연 텐셀 & 오가닉 염재</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-[#0B318F] font-serif">FREE</div>
@@ -79,8 +79,9 @@ export default function Hero({ onExploreProducts }) {
                 <span className="text-xs font-bold text-[#D0B579] uppercase tracking-wider block mb-1">
                   VATHEMAN ATELIER
                 </span>
-                <p className="text-sm font-semibold text-white">
-                  제주 풋감 손염색과 햇빛 발색이 만드는 롱텐실 스카프
+                <p className="text-sm font-semibold text-white leading-relaxed">
+                  쪽으로 손염색 후 햇볕과 바람이 만드는 발색<br />
+                  한땀 한땀 바느질로 무늬를 더한 한올 뉴텐셀스카프
                 </p>
               </div>
             </div>
