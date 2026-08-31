@@ -6,8 +6,8 @@ export default function BrandStory() {
   const pillars = [
     {
       icon: <Leaf className="text-[#0B318F]" size={28} />,
-      title: "100% 오가닉 텐실 소재",
-      desc: "피부에 닿았을 때 자극 없이 미끄러지듯 부드러운 100% 텐실(Tencel) 원사를 엄선하여 만듭니다."
+      title: "100% 오가닉 텐셀 소재",
+      desc: "피부에 닿았을 때 자극 없이 미끄러지듯 부드러운 100% 텐셀(Tencel) 원사를 엄선하여 만듭니다."
     },
     {
       icon: <Sun className="text-[#D0B579]" size={28} />,

@@ -95,7 +95,7 @@ export default function ProductCatalog({ onSelectProduct, onAddToCart }) {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
-  const categories = ["전체", "롱텐실", "사각텐실", "선물세트"];
+  const categories = ["전체", "롱텐셀", "사각텐셀", "선물세트"];
 
   const filteredProducts = useMemo(() => {
     return selectedCategory === "전체"
@@ -119,11 +119,11 @@ export default function ProductCatalog({ onSelectProduct, onAddToCart }) {
               </h2>
             </div>
             <p className="text-[#6E6862] text-sm font-light mt-2 md:mt-0 max-w-md">
-              롱텐실과 사각텐실으로 구성된 자연소재 핸드메이드 스카프 컬렉션입니다.
+              롱텐셀과 사각텐셀로 구성된 자연소재 핸드메이드 스카프 컬렉션입니다.
             </p>
           </div>
 
-          {/* Category Tabs (ALL, 롱텐실, 사각텐실, 선물세트) */}
+          {/* Category Tabs (ALL, 롱텐셀, 사각텐셀, 선물세트) */}
           <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-10 border-b border-[#E8DFD5]">
             <Filter size={16} className="text-[#0B318F] mr-1 shrink-0" />
             {categories.map((cat) => (
